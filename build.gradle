@@ -1,0 +1,65 @@
+
+import com.aestasit.markdown.slidery.gradle.Slidery
+
+buildscript {
+  repositories {
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+  }
+  dependencies {
+    classpath 'com.aestasit.markdown:slidery-gradle:0.3-SNAPSHOT'
+  }
+}
+
+ext.presenter = project.hasProperty('presenter') ? project.getProperty('presenter') : 'aestasit'
+
+task clean(description: "Cleans project build result.") << {
+  ant.delete(dir: "$buildDir")
+}
+
+tasks.withType(Slidery) {
+  title "Puppet Essentials"  
+  author "Alessandro Franceschi"
+  company "Lab42"
+  logo "images/lab42.png"
+  inputFile "slides/abbreviations.md"
+  inputFiles fileTree("slides/essentials") { 
+    include "*.md" 
+    exclude "abbreviations.md" 
+  } 
+  staticFiles "images", fileTree("images") { 
+    include "*.png" 
+  }
+  option "renderSyntaxHighlighting", true
+}
+
+task('deck', type: Slidery, description: "Creates presentation slides in HTML format.") { 
+  outputFile "$buildDir/deck/essentials/index.html"        
+  format 'deck-js'
+  theme "swiss"
+}
+
+task('impress', type: Slidery, description: "Creates presentation slides in HTML format.") {            
+  outputFile "$buildDir/impress/essentials/index.html"
+  format 'impress-js'
+}
+
+task('reveal', type: Slidery, description: "Creates presentation slides in HTML format.") {            
+  outputFile "$buildDir/reveal/essentials/index.html"
+  format 'reveal-js'
+}
+
+task('pdf', type: Slidery, description: "Creates presentation slides in PDL format.") { 
+  outputFile "$buildDir/pdf/Puppet_Essentials.pdf"        
+  format 'pdf'
+}
+
+task build(dependsOn: [deck,impress,reveal,pdf]) 
+
+task archive(dependsOn: [build], type: Zip) {
+  archiveName = "presentation.zip"
+  destinationDir = buildDir
+  from "$buildDir/presentation"
+  from "$buildDir/pdf"
+  include "**/*.*"
+}

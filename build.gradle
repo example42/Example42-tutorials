@@ -11,7 +11,7 @@ buildscript {
   }
 }
 
-ext.presenter = project.hasProperty('presenter') ? project.getProperty('presenter') : 'aestasit'
+ext.slides = project.hasProperty('slides') ? project.getProperty('slides') : 'essential'
 
 task clean(description: "Cleans project build result.") << {
   ant.delete(dir: "$buildDir")
@@ -23,7 +23,7 @@ tasks.withType(Slidery) {
   company "Lab42"
   logo "images/lab42.png"
   inputFile "slides/abbreviations.md"
-  inputFiles fileTree("slides/essentials") { 
+  inputFiles fileTree("slides/$slides") { 
     include "*.md" 
     exclude "abbreviations.md" 
   } 
@@ -34,32 +34,21 @@ tasks.withType(Slidery) {
 }
 
 task('deck', type: Slidery, description: "Creates presentation slides in HTML format.") { 
-  outputFile "$buildDir/deck/essentials/index.html"        
+  outputFile "$buildDir/deck/$slides/index.html"        
   format 'deck-js'
   theme "swiss"
 }
 
 task('impress', type: Slidery, description: "Creates presentation slides in HTML format.") {            
-  outputFile "$buildDir/impress/essentials/index.html"
+  outputFile "$buildDir/impress/$slides/index.html"
   format 'impress-js'
 }
 
 task('reveal', type: Slidery, description: "Creates presentation slides in HTML format.") {            
-  outputFile "$buildDir/reveal/essentials/index.html"
+  outputFile "$buildDir/reveal/$slides/index.html"
   format 'reveal-js'
 }
 
-task('pdf', type: Slidery, description: "Creates presentation slides in PDL format.") { 
-  outputFile "$buildDir/pdf/Puppet_Essentials.pdf"        
-  format 'pdf'
-}
 
-task build(dependsOn: [deck,impress,reveal,pdf]) 
+task build(dependsOn: [deck,impress,reveal]) 
 
-task archive(dependsOn: [build], type: Zip) {
-  archiveName = "presentation.zip"
-  destinationDir = buildDir
-  from "$buildDir/presentation"
-  from "$buildDir/pdf"
-  include "**/*.*"
-}

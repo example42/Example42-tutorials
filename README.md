@@ -16,3 +16,10 @@ Texts are from Alessandro Franceschi / Lab42 (and whoever wants to contribute, g
 
 Licence: Apache 2
 
+## Current Tutorial slides sets (Markdown sources)
+
+  - [Puppet Essentials](https://github.com/example42/Example42-tutorials/tree/master/slides/essentials) 
+
+  - [Advanced Topics](https://github.com/example42/Example42-tutorials/tree/master/slides/advanced)
+
+  - [How to Use Example42 modules](https://github.com/example42/Example42-tutorials/tree/master/slides/use42)   

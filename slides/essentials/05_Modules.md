@@ -142,7 +142,7 @@
 
   - The one that works for you
   
-  - The most essential, and optimized (but noe reusable) one
+  - The most essential, and optimized (but not reusable) one
   
   - The quickest one to do now
 

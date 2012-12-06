@@ -84,7 +84,7 @@
 
 # PARAMS LOOKUP ORDER
 
- - The function params_lookup is provided by the Puppi module
+  - The function params_lookup is provided by the Puppi module
 
   - It allows data to be defined in different ways:
     Via Hiera, if available

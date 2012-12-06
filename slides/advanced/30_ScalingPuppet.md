@@ -5,20 +5,20 @@
 
   - Reduce the number of resources per node
 
-  -- For each resource Puppet has to serialize, deserialize, apply, report... 
-
-  --    Avoid use of resources for too many entities (Do manage hundreds of users with the User type)
+    - For each resource Puppet has to serialize, deserialize, apply, report... 
+ 
+    -    Avoid use of resources for too many entities (Do manage hundreds of users with the User type)
   
-  -- Limit overhead of containing classes
+    - Limit overhead of containing classes
      (A module with the openssh::package, openssh::service, openssh::configuration subclasses pattern is uselessly filled with extra resources)
   
   - Do not use the file type to deliver too large files or binaries:
   
-  -- With source => , the content of the file is retrieved with a new connection to the PuppetMaster
+    - With source => , the content of the file is retrieved with a new connection to the PuppetMaster
     
-  -- With content => template() , the content is placed inside the catalog.
+    - With content => template() , the content is placed inside the catalog.
   
-  -- For each file Puppet has to make a checksum to verify if it has changed
+    - For each file Puppet has to make a checksum to verify if it has changed
   
   - Avoid too many elements in a source array for file retrieval:
   
@@ -45,7 +45,7 @@
   
         storeconfigs = false
 
-  - Alternatively enable This Store Configs and Mysql backend
+  - Alternatively enable Thin Store Configs and Mysql backend
   
         storeconfigs = true
         thin_storeconfigs = true

@@ -1,9 +1,9 @@
 # Puppet Language
 
   - A **Declarative** Domain Specific Language (DSL)
-  - Defines **STATES** not procedures
-  - Puppet code stays in **Manifests** (files .pp)
-  - Code contains **resources**, grouped in **classes**, organized in **modules**
+  - Defines **STATES** (Not procedures)
+  - Puppet code stays in **manifests** (files .pp)
+  - Code contains **resources** (file, package...), grouped in **classes**, organized in **modules**
   - **Nodes** (clients) include/declare classes
   - **Variables** can be Facts or User defined
   
@@ -21,9 +21,16 @@
           other_arg => value,
         }
         
+  - Example for a **file** resource type: 
+        file { 'motd':
+          ensure  => present,
+          path    => '/etc/motd',
+          content => 'Tomorrow is another day',
+        }
+        
   - Complete [Type Reference](http://docs.puppetlabs.com/references/3.0.0/type.html)
 
-# Simple samples of resources
+# Simple SampleS of ReSourceS
  
         package { 'openssh':
           ensure => present,
@@ -38,7 +45,7 @@
           enable => true,
         }
 
-# Some more complex examples of resources
+# Some More Complex examples of resources
 
         package { 'apache':
           ensure => present,
@@ -99,28 +106,28 @@
 
 # Parametrized Classes
 
-  - Classes that expose parameters.
+  - Classes that expose parameters (Since Puppet 2.6).
   
-  - Usage (class **declaration**):
+  - Usage (class **declaration**) with parameters:
   
         class { 'mysql':
           ensure => absent,
         }
         
-  - Example of parametrized class **definition**:
+  -  **Definition** of a parametrized class: 
 
         class mysql (
           ensure => 'present' 
           ) {     
 
-          package { 'mysql': }
+        package { 'mysql': }
             ensure => $ensure,     
           }     
 
           [...]
         }
 
-# Defines
+# Defines 
 
   - Similar to parametrized classes but can be used multi times, with different parameters
   Also called: **Defined resource types** or **defined types**
@@ -145,11 +152,13 @@
 
         }
 
-# Variables from Facts
-
-  - **Facter** runs on clients and collects **facts** that the server can use as variables
+# Variables
+  You need them...
   
-        al$ facter
+  - Can be provided by client nodes as **facts**
+    **Facter** runs on clients and collects **facts** that the server can use as variables
+  
+        al$ **facter**
  
         architecture => x86_64
         fqdn => Macante.example42.com
@@ -167,10 +176,14 @@
         osfamily => RedHat
         virtual => physical
  
+  - Or can be defined by users
+  
   
 # User Variables
 
-  - Users can define custom variables in Puppet code:
+  - You can define custom variables in different ways:
+  
+  - In Puppet manifests:
 
         $role = 'mail'
         
@@ -179,7 +192,7 @@
           default                   => 'httpd',
         }
         
-  - Variables can be set in External Node Classifiers
+  - In an External Node Classifier (Puppet DashBoard, the Foreman, Puppet Enterprise)
   
   - Or retrieved from an Hiera backend
   
@@ -187,4 +200,8 @@
         
 # Nodes
 
-  - When a client connects a PuppetMaster builds the catalog for its hostname
+  - A node is defined by hostname or certname
+  
+  -  When a client connects a PuppetMaster builds the catalog for its hostname or certname
+  
+  - The client

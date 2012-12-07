@@ -87,9 +87,10 @@
   - The function params_lookup is provided by the Puppi module
 
   - It allows data to be defined in different ways:
-    Via Hiera, if available
-    As Top Scope variable (as provided by External Node Classifiers)
-    Via defaults set in the module's params class
+  
+    - Via Hiera, if available
+    - As Top Scope variable (as provided by External Node Classifiers)
+    - Via defaults set in the module's params class
 
   - The "global" argument is used to define site_wide behavior
     If there's a direct param that's the value 
@@ -264,29 +265,16 @@
           },
         }
 
-  - The Hash values can be used in your custom templates:
-  -- Allow management of any kind of configuration parameter
-  -- Provide endless configuration values without adding new parameters
-
-  - Works only for parameters used in templates on in custom classes
-
-
-# CUSTOM OPTIONS IN TEMPLATES
-
-  - Pass to the module custom options:
-
-        class { 'openssh':
-          template => 'site/ssh/sshd.conf.erb',
-          options  => {
-            'LogLevel' => 'INFO',
-            'UsePAM'   => 'yes',
-          },
-        }
-  
-  - The options_lookup (Use the option value or set a default)
+  - The Hash values can be used in your custom templates with the **options_lookup** function
+    (Use the option value or set a default)
 
         UsePAM <%= scope.function_options_lookup(['UsePAM','no']) %>
         LogLevel <%= scope.function_options_lookup(['LogLevel','INFO']) %>
+
+  - This allows management of any kind of configuration parameter:
+  
+    Provide endless configuration values without adding new parameters
+
 
 
 # CUSTOMIZE: CUSTOM CLASS
@@ -437,18 +425,19 @@
 
 # How to make a NextGen module
 
+  - Get from GitHub the Next-Gen modules set:
+
         git clone -r http://github.com/example42/puppet-modules-nextgen
         cd puppet-modules-nextgen
-        Example42-tools/module_clone.sh
 
-  - Create a module (name will be prompted) based on the template in Example42-templates/standard42
+  - Create a module (name will be prompted) based on the template in Example42-templates/standard42:
 
         Example42-tools/module_clone.sh -t standard42
 
-  - Create a module cloned from the existing module mysql
+  - Create a module cloned from the existing module mysql:
 
         Example42-tools/module_clone.sh -m mysql
 
-  - Create a module called vim based on Example42-templates/minimal42
+  - Create a module called vim based on Example42-templates/minimal42:
 
         Example42-tools/module_clone.sh -t minimal42 -n vim

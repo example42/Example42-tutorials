@@ -12,6 +12,18 @@
  
   - Puppet module tool to interface with Puppet Modules Forge
   
+        puppet help module
+        [...]        
+        ACTIONS:
+          build        Build a module release package.
+          changes      Show modified files of an installed module.
+          generate     Generate boilerplate for a new module.
+          install      Install a module from the Puppet Forge or a release archive.
+          list         List installed modules
+          search       Search the Puppet Forge for a module.
+          uninstall    Uninstall a puppet module.
+          upgrade      Upgrade a puppet module.
+  
   
 # How to Use
 
@@ -46,6 +58,8 @@
    
 # Paths of a module
 
+  - Modules have a standard structure 
+
         mysql/                     # Main module directory
 
         mysql/manifests/           # Manifests directory. Puppet Code here
@@ -63,7 +77,6 @@
         mysql/Modulefile           # Module's metadata descriptor
 
 
-# Parametrized classes
 
 # Files, files, files everywhere
 
@@ -71,7 +84,11 @@
 
   - Provide static files, sourced according to a defined path hierarchy
 
+        source => "puppet:///modules/autofs/auto.homes"
+
   - Provide erb templates based where you can place variables and code
+
+        content => template("resolver/resolv.conf.erb"),
   
   - Build files from fragments (Using custom types like concat )
 
@@ -80,15 +97,19 @@
 
 # Files provided as Static source files
 
-        class autofs::client {
-          file { "/etc/auto.homes":
-            source => "puppet:///modules/autofs/auto.homes"
-          }
+  - A file resource whose content is retrieved from  static file
+  
+        file { "/etc/auto.homes":
+          ensure => present,
+          source => "puppet:///modules/autofs/auto.homes",
+        }
 
-  - Sourced files are searched in:
-
+  - The file is retrieved, on the PuppetMaster, from:
+  
         $modulepath/autofs/files/auto.homes
 
+  - In this case the content of the file is retrieved from the server during catalog application
+  
 
 # Erb templates
 
@@ -96,6 +117,7 @@
 
   - Templates are referenced with the content attribute:
 
+      
         content => template("resolver/resolv.conf.erb"),
   
     Which, on the puppet master is 
@@ -110,29 +132,35 @@
         nameserver <%= ns %>
         <% end %> 
 
-
+  - In this case the content of the file is directly inside the catalog
+  
 
 # Principes behind a Good and Reusable Module
 
   - Data Separation
-    Configuration data is defined outside the module (or even Puppet manifests)
-    Module’s behavior is managed via APIs
-    Allow module’s extension and override via external data
+  
+    - Configuration data is defined outside the module (or even Puppet manifests)
+    - Module's behavior is managed via APIs
+    - Allow module’s extension and override via external data
 
   - Reusability
-    Support different OS. Easily allow new additions.
-    Customize behavior without changing module code
-    Do not force author’s idea on how configurations should be provided
+
+    - Support different OS. Easily allow new additions.
+    - Customize behavior without changing module code
+    - Do not force author's idea on how configurations should be provided
 
   - Standardization
-    Follow PuppetLabs style guidelines (puppet-lint)
-    Have coherent, predictable and intuitive interfaces
-    Provide contextual documentation (puppet-doc)
+
+    - Follow PuppetLabs style guidelines (puppet-lint)
+    - Have coherent, predictable and intuitive interfaces
+    - Provide contextual documentation (puppet-doc)
 
   - Interoperability
-    Limit cross-module dependencies
-    Allow easy modules’ cherry picking 
-    Be self contained, do not interfere with other modules’ resources
+
+    - Limit cross-module dependencies
+    - Allow easy modules' cherry picking 
+    - Be self contained, do not interfere with other modules' resources
+
 
 # What's a Good Module anyway?
 
@@ -146,8 +174,10 @@
   
   - The quickest one to do now
 
+  - as usual... your mileage may vary
 
-# Modules documentation
+
+# Modules documentation with Puppet Doc
 
   - Puppetdoc generates documentation from manifests comments:
 

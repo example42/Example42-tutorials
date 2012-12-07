@@ -1,16 +1,24 @@
 # Puppet Language
 
   - A **Declarative** Domain Specific Language (DSL)
+
   - Defines **STATES** (Not procedures)
+
   - Puppet code stays in **manifests** (files .pp)
-  - Code contains **resources** (file, package...), grouped in **classes**, organized in **modules**
-  - **Nodes** (clients) include/declare classes
-  - **Variables** can be Facts or User defined
+
+  - Code contains **resources** that affects elements of the systme (file, package, service ...)
+
+  - Resources are often grouped in **classes** which are generally organized in **modules**
+
+  - **Nodes** (clients) include/declare resources or classes
+
+  - **Variables** may be defined nodes and can be Facts (generated from the node) or User defined
   
    
 # Resource Types
 
   - Single units of configurations
+
   - A Resource is composed by:
     A **type** (package, service, file, user, mount, exec ...)
     A **title** (how is called and referred)
@@ -21,7 +29,8 @@
           other_arg => value,
         }
         
-  - Example for a **file** resource type: 
+  - Example for a **file** resource type:
+  
         file { 'motd':
           ensure  => present,
           path    => '/etc/motd',
@@ -30,23 +39,33 @@
         
   - Complete [Type Reference](http://docs.puppetlabs.com/references/3.0.0/type.html)
 
+
 # Simple SampleS of ReSourceS
  
+  - Installation of OpenSSH package
+  
         package { 'openssh':
           ensure => present,
         }
 
+  - Creation of /etc/motd file
+  
         file { 'motd':
           path => '/etc/moth',
         }
 
+  - Start of httpd service
+  
         service { 'httpd':
           ensure => running,
           enable => true,
         }
 
-# Some More Complex examples of resources
 
+# More Complex examples of resources
+
+  - Installation of Apache package with the correct name for different OS
+ 
         package { 'apache':
           ensure => present,
           name   => $operatingsystem {
@@ -54,7 +73,9 @@
             default                   => 'httpd',
           }
         }
-      
+ 
+  - Management of nginx service with parameters defined in module's variables
+  
         service { 'nginx':
           ensure     => $nginx::manage_service_ensure,
           name       => $nginx::service,
@@ -64,6 +85,8 @@
           require    => Package['nginx'],
         }
       
+  - Creation of /etc/nginx/nginx.conf with content retrived from different possible sources (first found is provided)
+
         file { 'nginx.conf':
           ensure  => present,
           path    => '/etc/nginx/nginx.conf',
@@ -78,13 +101,13 @@
           }
         }
                 
+                
 # Classes
 
-  - Normal 'old style' classes.
-  - Usage:
-  
-        include mysql
+  - Classes are containers of different resources
 
+  - Since Puppet 2.6 classes can have parameters
+  
   - Example of a class **definition**:
           
         class mysql {     
@@ -104,16 +127,17 @@
 
         }
 
+  - Usage of "old style" classes (without parameters):
+
+    You can include the same class multiple times: it's applied only once.
+      
+        include mysql
+
+
 # Parametrized Classes
 
   - Classes that expose parameters (Since Puppet 2.6).
-  
-  - Usage (class **declaration**) with parameters:
-  
-        class { 'mysql':
-          ensure => absent,
-        }
-        
+
   -  **Definition** of a parametrized class: 
 
         class mysql (
@@ -126,18 +150,22 @@
 
           [...]
         }
+  
+  - Usage (class **declaration**) with parameters:
+  
+        class { 'mysql':
+          ensure => absent,
+        }
+
+  - You can declare a parametrized class only once.
+  
 
 # Defines 
 
-  - Similar to parametrized classes but can be used multi times, with different parameters
-  Also called: **Defined resource types** or **defined types**
-  
-  - Usage example (**declaration**):
-  
-        apache::virtualhost { 'www.example42.com':
-          template => 'site/apache/www.example42.com-erb'
-        }
+    Also called: **Defined resource types** or **defined types**
 
+  - Similar to parametrized classes but can be used multi times, with different parameters
+  
   - **Definition** example: 
   
         define apache::virtualhost (
@@ -152,13 +180,23 @@
 
         }
 
+  - Usage example (**declaration**):
+  
+        apache::virtualhost { 'www.example42.com':
+          template => 'site/apache/www.example42.com-erb'
+        }
+
+
+
 # Variables
-  You need them...
+
+  - You need them to provide different configurations for different kind of servers
   
   - Can be provided by client nodes as **facts**
+  
     **Facter** runs on clients and collects **facts** that the server can use as variables
   
-        al$ **facter**
+        al$ facter
  
         architecture => x86_64
         fqdn => Macante.example42.com
@@ -194,14 +232,24 @@
         
   - In an External Node Classifier (Puppet DashBoard, the Foreman, Puppet Enterprise)
   
-  - Or retrieved from an Hiera backend
+  - In an Hiera backend
   
         $syslog_server = hiera(syslog_server)
+
         
 # Nodes
 
-  - A node is defined by hostname or certname
+  - A node is identified by the PuppetMaster by its **hostname** or **certname**
   
-  -  When a client connects a PuppetMaster builds the catalog for its hostname or certname
+  - You can decide what resources, classes and variables to assign to a node in 2 ways:
   
-  - The client
+    - Using Puppet language ( Starting from /etc/manifests/site.pp )  
+    
+        node 'web01' {
+          include apache
+        }
+      
+    - Using an External Node Classifier (DashBoard, Foreman or custom scripts)
+  
+  - When a client connects a PuppetMaster builds a **catalog** with all the resources to apply on the client
+

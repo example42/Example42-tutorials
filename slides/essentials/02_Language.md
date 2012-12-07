@@ -162,7 +162,7 @@
 
 # Defines 
 
-    Also called: **Defined resource types** or **defined types**
+  - Also called: **Defined resource types** or **defined types**
 
   - Similar to parametrized classes but can be used multi times, with different parameters
   

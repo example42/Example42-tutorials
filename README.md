@@ -16,7 +16,7 @@ What you need to know to start with Puppet
 
 A introduction on how to use Example42 modules and their features
 
-  - [Sources](https://github.com/example42/Example42-tutorials/tree/master/slides/use42
+  - [Sources](https://github.com/example42/Example42-tutorials/tree/master/slides/use42)
   - [Slides](http://example42.com/tutorials/build/deck/use42/)
 
 
@@ -37,7 +37,6 @@ Slides are built with [Slidery](https://github.com/aestasit/slidery) a Java libr
 This repo contains only the Markdown texts and the scripts used generate the slides with [Slidery-gradle](https://github.com/aestasit/slidery-gradle), a Gradle plugin for Slidery.
 Thanks to Andrey Adamovic of Aestas IT for the cool work on Slidery and his help on how to use it.
 
-Built slides will be available on http://www.example42.com.
 
 Texts are from Alessandro Franceschi / Lab42 (and whoever wants to contribute, git history is reference)
 

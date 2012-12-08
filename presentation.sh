@@ -5,7 +5,7 @@ ls -1 slides/
 echo
 
 task=deck
-slides=essential
+slides=essentials
 
 slides=$1
 task=$2

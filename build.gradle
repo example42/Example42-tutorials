@@ -11,7 +11,8 @@ buildscript {
   }
 }
 
-ext.slides = project.hasProperty('slides') ? project.getProperty('slides') : 'essential'
+ext.slides = project.hasProperty('slides') ? project.getProperty('slides') : 'essentials'
+
 
 task clean(description: "Cleans project build result.") << {
   ant.delete(dir: "$buildDir")

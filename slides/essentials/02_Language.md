@@ -85,16 +85,13 @@
           ensure     => $nginx::manage_service_ensure,
           name       => $nginx::service,
           enable     => $nginx::manage_service_enable,
-          require    => Package['nginx'],
         }
 
-  - Creation of /etc/nginx/nginx.conf with content retrived from different possible sources (first found is provided)
+  - Creation of nginx.conf with content retrived from different sources (first found is served)
 
         file { 'nginx.conf':
           ensure  => present,
           path    => '/etc/nginx/nginx.conf',
-          require => Package['nginx'],
-          notify  => Service['nginx'],
           source  => [ "puppet:///modules/site/nginx/nginx.conf--${fqdn}",
                        "puppet:///modules/site/nginx/nginx.conf-${role}",
                        "puppet:///modules/site/nginx/nginx.conf" ],
@@ -139,9 +136,6 @@
           }
           service { 'mysql':
             ensure    => running,
-            enable    => true,
-            require   => Package['mysql-server'],
-            subscribe => File['my.cnf'],
            }
          [...]
         }
@@ -169,9 +163,8 @@
   - **Definition** example:
 
         define apache::virtualhost (
-          $template   = 'apache/virtualhost.conf.erb' ,
-          [...]
-          ensure => 'present' ) {
+          $template = 'apache/virtualhost.conf.erb' ,
+          [...] ) {
 
           file { "ApacheVirtualHost_${name}":
             ensure  => $ensure,

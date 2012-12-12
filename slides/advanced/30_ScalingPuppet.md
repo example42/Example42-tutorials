@@ -1,6 +1,3 @@
-# Multi Master setups
-
-
 # Optimize code for performance
 
   - Reduce the number of resources per node
@@ -28,7 +25,6 @@
                     "site/openssh/sshd.conf ],
 
     This checks 3 files (and eventually gets 3 404 errors from server) before getting the default ones.
-
 
 
 # Reduce PuppetMaster(s) load

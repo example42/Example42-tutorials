@@ -42,28 +42,29 @@
 
   - On the Master you can use puppet cert to manage certificates
 
-        puppet cert --list       # List the clients certificates to sign
-        puppet cert --list --all # List all clients certificates: signed (+), revoked (-), to sign ( )
-        puppet cert --sign <certname> # Sign the certificate of the client, identified by its certname
+        puppet cert --list       # List the (client) certificates to sign
+        puppet cert --list --all # List all certificates: signed (+), revoked (-), to sign ( )
+        puppet cert --sign <certname> # Sign the certificate of the client
 
   - By default the first Puppet run on a client fails:
 
-        client # puppet agent -t    # A optional --waitforcert 60 parameter makes client wait 60 seconds before giving up
+        client # puppet agent -t    # "Exiting; no certificate found and waitforcert is disabled"
+        # An optional --waitforcert 60 parameter makes client wait 60 seconds before giving up
 
-        server # puppet cert --list # The client hostname or certname should appear
+        server # puppet cert --list # The client hostname or certname appears
 
-        server # puppet cert --sign <client> # The client's certificate is signed, now its connections are trusted
+        server # puppet cert --sign <client> # The client's certificate is signed, now it's trusted
 
-        client # puppet agent -t    # Normal puppet runs can be made from the client from now
+        client # puppet agent -t    # The client fetch its catalog now
+        
+  - Server accepts only one certificate for hostname, if a server is destroyed and recreated with the same hostnae the old certificate has to be removed
 
-  - Server accepts only one certificate for hostname, if a client is scratched the old certificate has to be removed
+        server # puppet cert --clean <client> # The old cert is removed, a new signing is required
 
-        server # puppet cert --clean <client> # The client's certificate is removed, a new signing is required
-
-  - Client stores its certificates and the server's public one in $vardir/ssl (/var/lib/puppet/ssl on Puppet OpenSource)
+  - Client stores its certificates and the server's public one in **$vardir/ssl** (/var/lib/puppet/ssl on Puppet OpenSource)
     If you have issues with certificates, this directory can be deleted, it's recreated at puppet run (the relevant cert must be cleaned on the master too)
 
-  - Server stores clients public certificates and in $vardir/ssl/ca (/var/lib/puppet/ssl/ca). DO NOT remove this directory.
+  - Server stores clients public certificates and in **$vardir/ssl/ca** (/var/lib/puppet/ssl/ca). DO NOT remove this directory.
 
 
 # Anatomy of a Puppet Run

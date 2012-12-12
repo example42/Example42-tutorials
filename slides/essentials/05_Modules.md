@@ -17,7 +17,7 @@
           build        Build a module release package.
           changes      Show modified files of an installed module.
           generate     Generate boilerplate for a new module.
-          install      Install a module from the Puppet Forge or a release archive.
+          install      Install a module from the Puppet Forge or an archive.
           list         List installed modules
           search       Search the Puppet Forge for a module.
           uninstall    Uninstall a puppet module.
@@ -30,16 +30,16 @@
 
   Modules have a standard structure:
 
-        mysql/               # Main module directory
+        mysql/            # Main module directory
 
-        mysql/manifests/     # Manifests directory. Puppet code here. Required.
-        mysql/lib/           # Plugins directory. Ruby code here
-        mysql/templates/     # ERB Templates directory
-        mysql/files/         # Static files directory
-        mysql/spec/          # Puppet-rspec test directory
-        mysql/tests/         # Tests / Usage examples directory
+        mysql/manifests/  # Manifests directory. Puppet code here. Required.
+        mysql/lib/        # Plugins directory. Ruby code here
+        mysql/templates/  # ERB Templates directory
+        mysql/files/      # Static files directory
+        mysql/spec/       # Puppet-rspec test directory
+        mysql/tests/      # Tests / Usage examples directory
 
-        mysql/Modulefile     # Module's metadata descriptor
+        mysql/Modulefile  # Module's metadata descriptor
 
   This layout enables useful conventions
 
@@ -52,20 +52,20 @@
         # Main mysql class is placed in: $modulepath/mysql/manifests/init.pp
 
         include mysql::server
-        # mysql::server class is defined in: $modulepath/mysql/manifests/server.pp
+        # This class is defined in: $modulepath/mysql/manifests/server.pp
 
         mysql::conf { ...}
-        # mysql::conf define is defined in: $modulepath/mysql/manifests/conf.pp
+        # This define is defined in: $modulepath/mysql/manifests/conf.pp
 
         include mysql::server::ha
-        # mysql::server::ha class is defined in: $modulepath/mysql/manifests/server/ha.pp
+        # This class is defined in: $modulepath/mysql/manifests/server/ha.pp
 
   - Provide files based on Erb Templates (Dynamic content)
 
         content => template('mysql/my.cnf.erb'),
         # Template is in: $modulepath/mysql/templates/my.cnf.erb
 
-  - Provide static files (Static content). Note you can use content OR source, not both, for the same file.
+  - Provide static files (Static content). Note you can use content OR source for the same file.
 
         source => 'puppet:///modules/mysql/my.cnf'
         # File is in: $modulepath/mysql/files/my.cnf
@@ -77,12 +77,12 @@
 
   - In a template all the Puppet variables (facts or user assigned) can be used :
 
-        # File managed by Puppet on <%= fqdn %>
-        search <%= domain %>
+        # File managed by Puppet on <%= @fqdn %>
+        search <%= @domain %>
 
   - But also more elaborated Ruby code
 
-        <% dns_servers.each do |ns| %>
+        <% @dns_servers.each do |ns| %>
         nameserver <%= ns %>
         <% end %>
 
@@ -90,7 +90,7 @@
     (Sourced files, instead, are retrieved from the puppetmaster during catalog application)
 
 
-# Principes behind a Good and Reusable Module
+# Principes behind a Reusable Module
 
   - Data Separation
 
@@ -131,6 +131,9 @@
 
   - as usual... your mileage may vary
 
+  - In Puppet's world the concept of "Best Practices" is somehow fluid... :-)
+    (It follows the language's features evolution and the blog post of the moment...)
+ 
 
 # Modules documentation with Puppet Doc
 

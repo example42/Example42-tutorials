@@ -427,7 +427,7 @@
 
   - Get from GitHub the Next-Gen modules set:
 
-        git clone -r http://github.com/example42/puppet-modules-nextgen
+        git clone --recursive http://github.com/example42/puppet-modules-nextgen
         cd puppet-modules-nextgen
 
   - Create a module (name will be prompted) based on the template in Example42-templates/standard42:

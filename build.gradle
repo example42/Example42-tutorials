@@ -50,6 +50,10 @@ task('reveal', type: Slidery, description: "Creates presentation slides in HTML 
   format 'reveal-js'
 }
 
+task('pdf', type: Slidery, description: "Creates presentation slides in PDF format.") {
+  outputFile "$buildDir/pdf/slides.pdf"
+  format 'pdf'
+}
 
 task build(dependsOn: [deck,impress,reveal]) 
 

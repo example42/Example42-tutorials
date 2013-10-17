@@ -7,7 +7,7 @@ echo
 JBOSS_HOME=${JBOSS_HOME:-"<%= scope.lookupvar('jboss::real_jboss_dir') %>"}
 
 task=${1:-"deck"}
-slides=${2:-"essentials"}
+slides=${2:-"PuppetTutorial"}
 
 gradle -Pslides=$slides clean $task
 

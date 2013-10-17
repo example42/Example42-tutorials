@@ -67,13 +67,13 @@
   Server stores clients public certificates and in **$vardir/ssl/ca** (/var/lib/puppet/ssl/ca). DO NOT remove this directory.
 
 
-# Anatomy of a Puppet Run
+# Anatomy of a Puppet Run - Part 1: Catalog compilation
 
   Execute Puppet on the client
 
     Client shell # puppet agent -t
 
-  If pluginsync = true (default from Puppet 3.0) the client retrieves all extra plugins (facts, types and providers) from the server
+  If pluginsync = true (default from Puppet 3.0) the client retrieves all extra plugins (facts, types and providers) present in modules on the server's $modulepath
 
     Client output # Info: Retrieving plugin
 
@@ -89,12 +89,16 @@
 
   If there are not syntax errors in the processed Puppet code, the server sends the catalog to the client, in PSON format.
 
+# Anatomy of a Puppet Run - Part 2: Catalog application
+
     Client output # Info: Caching catalog for <client>
 
   The client receives the catalog and starts to apply it locally
+  If there are dependency loops the catalog can't be applied and the whole tun fails.
 
     Client output # Info: Applying configuration version '1355353107'
-    [...] All changes to the system are shown here. If there are errors they are relevant to specific resources
+    
+  All changes to the system are shown here. If there are errors (in red or pink, according to Puppet versions) they are relevant to specific resources but do not block the application of the other resources (unless they depend on the failed ones).
 
   At the end ot the Puppet run the client sends to the server a report of what has been changed
 

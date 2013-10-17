@@ -139,7 +139,7 @@
 
   Puppetdoc generates documentation from manifests comments:
 
-    $ puppetdoc [--all] --mode rdoc [--outputdir ] [--debug|--verbose] [--trace]
+    $ puppet doc [--all] --mode rdoc [--outputdir ] [--debug|--verbose] [--trace]
       [--modulepath ] [--manifestdir ] [--config ]
 
   Comment classes as below:
@@ -158,3 +158,5 @@
     class apache {
       ...
     }
+
+# Practice: Write an openssh module

@@ -4,11 +4,10 @@ echo "Available slides"
 ls -1 slides/
 echo
 
-task=deck
-slides=essentials
+JBOSS_HOME=${JBOSS_HOME:-"<%= scope.lookupvar('jboss::real_jboss_dir') %>"}
 
-slides=$1
-task=$2
+task=${1:-"deck"}
+slides=${2:-"essentials"}
 
 gradle -Pslides=$slides clean $task
 

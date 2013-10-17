@@ -19,7 +19,7 @@ task clean(description: "Cleans project build result.") << {
 }
 
 tasks.withType(Slidery) {
-  title "Testing Puppet in the Playground"  
+  title "Puppet Tutorial"  
   author "Alessandro Franceschi"
   company "Lab42"
 //  logo "images/lab42.png"
@@ -35,9 +35,9 @@ tasks.withType(Slidery) {
 }
 
 task('deck', type: Slidery, description: "Creates presentation slides in HTML format.") { 
-  outputFile "$buildDir/deck/$slides/index.html"        
+  outputFile "$buildDir/deck/$slides/index.html"
   format 'deck-js'
-//  theme "swiss"
+  theme "swiss"
 }
 
 task('impress', type: Slidery, description: "Creates presentation slides in HTML format.") {            

@@ -238,16 +238,42 @@ Commonly used ENC are Puppet DashBoard, the Foreman, Puppet Enterprise.
 
 A node is identified by the PuppetMaster by its **hostname** or **certname**
 
-You can decide what resources, classes and variables to assign to a node in 2 ways:
+You can decide what classes to assign to a node in different ways:
 
-Using Puppet language ( Starting from /etc/manifests/site.pp )
+#### In the site manifest 
+Using Puppet language ( Starting from ```/etc/puppet/manifests/site.pp``` ) you can define nodes with a syntax like:
 
     node 'web01' {
       include apache
     }
 
-Using an External Node Classifier (DashBoard, Foreman or custom scripts)
+This is the default behaviour in Puppet Opensource.
 
-When a client connects a PuppetMaster builds a **catalog** with all the resources to apply on the client
+#### On an External Node Classifier (ENC)
+Puppet can query an external source to retrieve the classes and the variables to assign to a node. This source is called External Node Classifier and can be anything that when interrogated via a script with the clients' certname returns a yaml file with the list of classes and parameters.
 
-The catalog is in Pson format (a Puppet version of Json)
+Common ENC are Puppet DashBoard, Foreman and Puppet Enterprise (where the functionality of ENC is enabled by default).
+
+To enable the usage of an ENC set this parameters in puppet.conf
+
+    external_nodes = /etc/puppet/node.rb # Script that queries the ENC
+    node_terminus = exec                 # Enable the usage of the script
+
+#### With hiera_include
+Hiera provides a **hiera_include** function that allows the inclusion of classes as defined on Hiera. This is an emerging approach that is particularly useful when there's massive usage of Hiera as backend for Puppet data. 
+
+In ```/etc/puppet/manifests/site.pp``` just place:
+
+    hiera_include(classes)
+    
+and place, as an array, the classes to include in you Hiera data source under the key 'classes'.
+
+# The Catalog
+
+The **catalog** is the complete list of resources, and their relationships, that the Puppet Master compiles for the client.
+
+It's the result of all the puppet code and logic that we define for a given node in our manifests and is applied on the client after it has been compiled and received from the master.
+
+The client uses the RAL (Resource Abstraction Layer) to execute the actual system's commands that convert abstract resources like ```package { 'openssh': }``` to their actual fullfillment on the system (```apt-get install openssh``` , ```yum install openssh``` ...).
+
+The catalog is saved by the client in ```/var/lib/puppet/client_yaml/catalog/$certname.yaml``` 

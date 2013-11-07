@@ -115,24 +115,6 @@
     - Limit cross-module dependencies
     - Allow easy modules' cherry picking
     - Be self contained, do not interfere with other modules' resources
-
-
-# What's a Good Module anyway?
-
-  The most reusable and customizable
-
-  The one full of features
-
-  The one that works for you
-
-  The most essential, and optimized (but not reusable) one
-
-  The quickest one to do now
-
-  as usual... your mileage may vary
-
-  In Puppet's world the concept of "Best Practices" is somehow fluid... :-)
-  (It follows the language's features evolution and the blog post of the moment...)
  
 
 # Modules documentation with Puppet Doc

@@ -1,23 +1,29 @@
-
 # Resource references
-When inside your Puppet code you have to reference an existing resource, you can do using this syntax:
+In Puppet any resource is uniquely identified by its type and its name.
+You can't have 2 resources of the same type with the same name in a catalog.
 
-    Type['title']
+We have seen that you declare resources with a syntax like:
 
-For example a resource like:
-
-    file { 'motd':
-      ensure => present,
+    type { 'name':
+      arguments => values,
     }
+
+When you need to reference to them in your code the syntax is like:
+
+    Type['name']
     
-Is referenced with:
+Some examples:
+
+    file { 'motd': ... }
+    apache::virtualhost { 'example42.com': .... }
+    exec { 'download_myapp': .... }
+
+are referenced, respectively, with
 
     File['motd']
-    
-Upper char is used also for subclasses/defines with :: separator:
-
-    Apache::Virtualhost['example.com']
- 
+    Apache::Virtualhost['example42.com']
+    Exec['download_myapp']
+     
 
 # Resource defaults
 It's possible to set default argument values for a resource in order to reduce code dumplication. The syntax is:
@@ -47,6 +53,23 @@ Place **global** resource defaults in /etc/pupept/manifests/site.pp outside any 
 Place **local** resource defaults at the beginning of a class that uses them (mostly for clarity sake, as they are parse-order independent).
 
 # Nodes inheritance
+On the PuppetMaster you can define with the **node** definition the resources to apply to any node.
+
+It is possible to have an inheritance structure for nodes, so that resources defined for a node are automatically included in an inheriting node.
+
+An example:
+
+    node 'general' { ... }
+    
+    node 'www01' inherits general { ... }
+    
+In Puppet versions prior to 3, it was possibile to use nodes inheritance also to set variables and override them at different inheritance levels, and refer to these variables with their "short" name (not fully qualified).
+When using this approach it was important to avoid the inclusion on classes in the inheritance tree, since some variables could be evaluated in an unexpected way.
+
+This is no more possible because variables are not more dynamically scoped, and generally speaking nodes inheritance has been deprecated.
+
+Just know that is exists and that if you still want to use it, be sure that you use it to include classes whose parameters are defined either on Hiera or at top scope.
+
 
 # Class inheritance
 In Puppet classes are just containers of resources and have nothing to do with OOP classes. Therefore the meaning of class inheritance is somehow limited to few specific cases.
@@ -70,9 +93,93 @@ Moreover the child class can override the arguments of a resource defined in the
 
 # Run Stages
 
+In Puppet 2.6 it has been introduced the concept of Run Stages to help users in managing the order of dependencies when applying resources.
+
+Puppet (> 2.6) provides a default **main** stage, you can add any number or further stages with the stage resource type:
+
+    stage { 'pre':
+      before => Stage['main'],
+    }
+    
+Which is equivalent to:
+
+    stage { 'pre': }
+    Stage['pre'] -> Stage['main']
+    
+You can assign any class to a defined stage with the stage metaparameter:
+
+    class { 'yum':
+      stage => 'pre',
+    }
+ 
+In this way all the resources provided by the yum class are applied before all the other resources (in the default main stage).
+
+The idea of stages at the begining seemed a good solution to better handle large sets of dependencies in Puppet. In reality some drawbacks and the augmented risk of having dependency cycles make them less useful than expected.
+
+As a rule of thmb is recommended to use them for simple classes (that don't include other classes) and where really necessary (for example to set up package management configurations at the beginning of a Puppet run).
+
+[Official documentation on Run Stages](http://docs.puppetlabs.com/puppet/latest/reference/lang_run_stages.html)
+ 
 # Metaparameters
+Metaparameters are parameters available to any resource type, they can be used for different purposes:
+
+ Manage dependencies (**before**, **require**, **subscribe**, **notify**, **stage**)
+ 
+ Manage resources' application policies (**audit**, **noop**, **schedule**, **loglevel**)
+ 
+ Add information to a resource (**alias**, **tag**)
+ 
+[Official documentation on Metaparameters](http://docs.puppetlabs.com/puppet/latest/reference/metaparameter.html)
+
 
 # Managing dependencies
+Puppet language is declarative and not procedural: it defines states, the order in which resources are written in manifests does not affect the order in which they are applied to the desired state.
+
+To manage resources ordering, there are 3 different methods, which can cohexist:
+
+  1 - Use the metaparameters **before**, **require**, **notify**, **subscribe**
+  
+  2 - Use the **Chaining arrows** (compared to the above metaparamers: **->** , **<-** , **<~** , **~>**)
+  
+  3 - Use run stages
+
+In a typical Package/Service/Configuration file example you want the package to be installed first, configure it and then start the service, eventually managing its restart if the config file changes.
+
+
+This can be expressed with metaparameters:
+
+    package { 'exim':
+      before => File['exim.conf'],  
+    }
+    
+    file { 'exim.conf':
+      notify => Service['exim'],
+    }
+    
+    service { 'exim':
+    }
+    
+which is equivalent to 
+
+    Package['exim'] -> File['exim.conf'] ~> Service['exim']
+    
+But the same ordering can be expressed using the alternative reverse metaparameters:
+
+    package { 'exim':
+    }
+    
+    file { 'exim.conf':
+      require => Package['exim'],
+    }
+    
+    service { 'exim':
+      subscribe => File['exim.conf'], 
+    }
+
+which can also be expressed like:
+
+    Service['exim'] <~ File['exim.conf'] <- Package['exim']
+
 
 # Conditionals
 Puppet provides different constructs to manage conditionals inside manifests:
@@ -142,3 +249,31 @@ It's possible to combine multiple comparisons with **and** and **or**
 
 # Exported resources
 
+When you need to provide to an host informations about resources present in another host, you need **exported resources**: resources declared in the catalog of a node (based on its facts and variables) but applied (collected) on another node.
+
+Resources are declared with the special @@ notation which marks them as exported so that they are not applied to the node where they are declared:
+
+    @@host { $::fqdn:
+      ip  => $::ipaddress,
+    }
+    
+    @@concat::fragment { "balance-fe-${::hostname}",
+      target  => '/etc/haproxy/haproxy.cfg',
+      content => "server ${::hostname} ${::ipaddress} maxconn 5000"
+      tag     => "balance-fe",
+    }
+
+Once a catalog containing exported resources has been applied on a node and stored by the PuppetMaster (typically on PuppetDB), the exported resources can be collected with the spaceshift syntax (where is possible to specify search queries):
+
+    Host << || >>
+    Concat::Fragment <<| tag == "balance-fe" |>>
+    Sshkey <<| |>>
+    Nagios_service <<||>>
+    
+In order to use exported resources you need to enable on the Puppet Master the **storeconfigs** option and specify the backend to use.
+You can do this configure a PuppetMaster to use PuppetDB:
+
+    storeconfigs = true
+    storeconfigs_backend = puppetdb
+
+In earlier Puppet versions storeconfigs is based on ActiveRecord, which is considerable slower.

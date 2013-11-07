@@ -4,14 +4,14 @@
 
   Based on 3 components:
 
-  One or more central masters, from where commands can be issued
+  One or more central consoles, from where the **mco** command can be issued
 
-  The infrastructure nodes, where an agnet receieves and executes the requested actions
+  The infrastructure nodes, where an **agent** receieves and executes the requested actions
 
-  A middleware message broker, that allows communication between master(s) and agents
+  A middleware **message broker**, that allows communication between master(s) and agents
 
 
   Possible actions are based on plugins
-  Common plugins are: service, package, puppetd, filemgr...
+  Common plugins are: **service**, **package**, **puppetd**, **filemgr**...
 
   Simple RCPs allow easy definitions of new plugins or actions

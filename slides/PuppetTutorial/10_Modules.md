@@ -141,4 +141,3 @@
       ...
     }
 
-# Practice: Write an openssh module

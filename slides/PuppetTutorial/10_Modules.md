@@ -107,7 +107,7 @@
   Standardization
 
     - Follow PuppetLabs style guidelines (puppet-lint)
-    - Have coherent, predictable and intuitive interfaces
+    - Have coherent, predictable and intuitive interfaces
     - Provide contextual documentation (puppet-doc)
 
   Interoperability

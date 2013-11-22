@@ -11,7 +11,7 @@
 
         rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm # For Epel repo 
         
-        rpm -Uvh http://yum.puppetlabs.com/el/6/products/i386/puppetlabs-release-6-7.noarch # For PuppetLabs repo
+        rpm -Uvh http://yum.puppetlabs.com/el/6/products/i386/puppetlabs-release-6-7.noarch # For PuppetLabs repo
     
         yum install puppet
     

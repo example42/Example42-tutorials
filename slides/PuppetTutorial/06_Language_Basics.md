@@ -256,7 +256,7 @@ Common ENC are Puppet DashBoard, Foreman and Puppet Enterprise (where the functi
 
 To enable the usage of an ENC set this parameters in puppet.conf
 
-    external_nodes = /etc/puppet/node.rb # Script that queries the ENC
+    external_nodes = /etc/puppet/node.rb # Script that queries the ENC
     node_terminus = exec                 # Enable the usage of the script
 
 #### With hiera_include

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-echo "Usage: $0 slide output"
+echo "Usage: $0 output slide"
 echo "Available slides"
 ls -1 slides/
 echo

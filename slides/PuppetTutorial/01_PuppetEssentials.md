@@ -49,6 +49,8 @@
 
 # Software related to Puppet:
 
+  [Facter](http://docs.puppetlabs.com/facter/) - Complementary tool to retrieve system's data
+  
   [MCollective](http://docs.puppetlabs.com/mcollective/) - Infrastructure Orchestration framework
   
   [Hiera](http://docs.puppetlabs.com/hiera/1/) - Key-value lookup tool where Puppet data can be placed
@@ -109,5 +111,7 @@ Check also [Puppet Language History](http://docs.puppetlabs.com/guides/language_
 
   3.2.x  - Future parser (experimental)
 
-  3.3.x  - Data in modules
+  3.3.x  - Data in modules (experimental, retired)
+
+  3.4.x  - contain function
   

@@ -64,28 +64,29 @@ Command used on the server: ```puppet master```  (generally as **puppet**)
 
 
 
+# Certificates management
+
   On the Master you can use puppet cert to manage certificates
   
   List the (client) certificates to sign:
 
-    puppet cert --list
+    puppet cert list
 
   List all certificates: signed (+), revoked (-), to sign ( ):
 
-    puppet cert --list --all
+    puppet cert list --all
     
   Sign a client certificate:
   
-    puppet cert --sign <certname>
+    puppet cert sign <certname>
     
   Remove a client certificate:
   
-    puppet cert --clean <certname>
+    puppet cert clean <certname>
     
-  Client stores its certificates and the server's public one in **$vardir/ssl** (/var/lib/puppet/ssl on Puppet OpenSource)
+  Client stores its certificates and the server's public one in ```$vardir/ssl**``` (```/var/lib/puppet/ssl``` on Puppet OpenSource)
   
-
-  Server stores clients public certificates and in **$vardir/ssl/ca** (/var/lib/puppet/ssl/ca). DO NOT remove this directory.
+  Server stores clients public certificates and in ```$vardir/ssl/ca``` (```/var/lib/puppet/ssl/ca```). DO NOT remove this directory.
   
 # Certificates management - First run
   
@@ -98,7 +99,7 @@ An optional ````--waitforcert 60``` parameter makes client wait 60 seconds befor
   
 The server has received the client's CSR which has to be manually signed:
 
-    server # puppet cert --sign <client> 
+    server # puppet cert sign <certname> 
 
 Once signed on the Master, the client can connect and receive its catalog:
 
@@ -107,9 +108,15 @@ Once signed on the Master, the client can connect and receive its catalog:
 
 If you have issues with certificates (reinstalled client or other certs related problemes):
 
- this directory can be deleted, if mit's recreated at puppet run (the relevant cert must be cleaned on the master too)
+Be sure client and servet times are synced
 
+Clean up the client certificate. On the client remove it:
 
+    client # mv /var/lib/puppet/ssl /var/lib/puppet/ssl.old
+    
+On the Master clean the old client certificate:
+
+    server # puppet cert clean <certname> 
 
 
 # Puppet configuration: puppet.conf

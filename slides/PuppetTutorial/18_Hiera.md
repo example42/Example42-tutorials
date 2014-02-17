@@ -115,9 +115,9 @@ If you expect an hash as value for a given key you can use the hiera() function 
 ### Extra parameters
 All these hiera functions may receive additional parameters:
 
-- Second argument: **default** value
+Second argument: **default** value if no one is found
 
-- Third argument: **override** with a custom data source added at the top of the configured hierarchy 
+Third argument: **override** with a custom data source added at the top of the configured hierarchy 
 
         $my_dns_servers = hiera("dns_servers","8.8.8.8","$country")
 

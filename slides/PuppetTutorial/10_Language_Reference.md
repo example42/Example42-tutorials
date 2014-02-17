@@ -112,11 +112,7 @@ You can assign any class to a defined stage with the stage metaparameter:
       stage => 'pre',
     }
  
-In this way all the resources provided by the yum class are applied before all the other resources (in the default main stage).
-
-The idea of stages at the begining seemed a good solution to better handle large sets of dependencies in Puppet. In reality some drawbacks and the augmented risk of having dependency cycles make them less useful than expected.
-
-As a rule of thmb is recommended to use them for simple classes (that don't include other classes) and where really necessary (for example to set up package management configurations at the beginning of a Puppet run).
+Do not abuse of run stages (be vary of dependency cycles)!
 
 [Official documentation on Run Stages](http://docs.puppetlabs.com/puppet/latest/reference/lang_run_stages.html)
  
@@ -143,8 +139,9 @@ To manage resources ordering, there are 3 different methods, which can cohexist:
   
   3 - Use run stages
 
-In a typical Package/Service/Configuration file example you want the package to be installed first, configure it and then start the service, eventually managing its restart if the config file changes.
+# Managing dependencies
 
+In a typical Package/Service/Configuration file example you want the package to be installed first, configure it and then start the service, eventually managing its restart if the config file changes.
 
 This can be expressed with metaparameters:
 
@@ -243,9 +240,9 @@ The in operator checks if a string present in another string, an array or in the
 #### Expressions combinations
 It's possible to combine multiple comparisons with **and** and **or** 
 
-     if ($::osfamily == 'RedHat') and ($::operatingsystemrelease == '5') { [ ... ] }
+    if ($::osfamily == 'RedHat') and ($::operatingsystemrelease == '5') { [ ... ] }
 
-     if (operatingsystem == 'Ubuntu') or ($::operatingsystem == 'Mint') { [ ...] }
+    if (operatingsystem == 'Ubuntu') or ($::operatingsystem == 'Mint') { [ ...] }
 
 # Exported resources
 
@@ -269,7 +266,9 @@ Once a catalog containing exported resources has been applied on a node and stor
     Concat::Fragment <<| tag == "balance-fe" |>>
     Sshkey <<| |>>
     Nagios_service <<||>>
-    
+
+# Exported resources - Configuration
+
 In order to use exported resources you need to enable on the Puppet Master the **storeconfigs** option and specify the backend to use.
 You can do this configure a PuppetMaster to use PuppetDB:
 

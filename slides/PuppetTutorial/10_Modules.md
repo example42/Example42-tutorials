@@ -95,14 +95,14 @@
   Data Separation
 
     - Configuration data is defined outside the module (or even Puppet manifests)
-    - Module's behavior is managed via APIs
+    - Module behavior is managed via APIs
     - Allow module's extension and override via external data
 
   Reusability
 
     - Support different OS. Easily allow new additions.
     - Customize behavior without changing module code
-    - Do not force author's idea on how configurations should be provided
+    - Do not force author idea on how configurations should be provided
 
   Standardization
 
@@ -113,9 +113,25 @@
   Interoperability
 
     - Limit cross-module dependencies
-    - Allow easy modules' cherry picking
+    - Allow easy modules cherry picking
     - Be self contained, do not interfere with other modules' resources
  
+# Testing Modules
+Puppet code testing can be done at different levels with different tools
+
+**puppet parser validate <manifest.pp>** - Checks the syntax of a manifest
+
+**puppet-lint <manifest.pp>** - A gem that checks the style of a manifest
+
+**puppet-rspec** - A gem that runs rspec unit tests on a module (Based on compiled catalog)
+
+**cucumber-puppet** - A gem that runs cucumber tests a module (Based on compiled catalog) OBSOLETE
+
+**puppet-rspec-system** - A gem that creates Vagrant VM and check for the expected results of real Puppet runs
+
+**Beaker** - A gem that runs acceptance tests on multiple Vagrant VM
+
+
 
 # Modules documentation with Puppet Doc
 

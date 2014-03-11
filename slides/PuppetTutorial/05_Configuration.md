@@ -1,6 +1,6 @@
 # Operational modes
 
-## Masterless - puppet apply
+### Masterless - puppet apply
 
 Your Puppet code (manifests) is applied directly onthe target system.
 
@@ -10,13 +10,13 @@ Have to distribute manifests and modules to the managed servers.
 
 Command used ```puppet apply``` (generally as root)
  
-## Master / Client - puppet agent
+### Master / Client - puppet agent
 
 You have clients, where Puppet client is installed and Masters where Puppet server resides
 
 Client/Server communication is via https (**port 8140**)
 
-Clients' certificates have to be accepted (**signed**) on the Master
+Clients certificates have to be accepted (**signed**) on the Master
 
 Command used on the client: ```puppet agent```  (generally as **root**)
 
@@ -208,12 +208,17 @@ Wait for certificate approval (by default 120 seconds) in the first Puppet run (
 
 # Useful paths
 
-```/var/log/puppet``` contains logs (but also on normal syslog files, with facility daemon), both for agents and master
+**/var/log/puppet** contains logs (but also on normal syslog files, with facility daemon), both for agents and master
 
-```/var/lib/puppet``` contains Puppet operational' data (catalog, certs, backup of files...)
+**/var/lib/puppet** contains Puppet operational data (catalog, certs, backup of files...)
 
-```/var/lib/puppet/ssl``` contains SSL certificate```/var/lib/puppet/clientbucket``` contains backup copies of the files changed by Puppet```/etc/puppet/manifests/site.pp``` (On Master) The first manifest that the master parses when a client connects in order to produce the configuration to apply to it
-```/etc/puppet/modules``` and ```/usr/share/puppet/modules``` (On Master) The default directories where modules are searched
+**/var/lib/puppet/ssl** contains SSL certificate
+
+**/var/lib/puppet/clientbucket** contains backup copies of the files changed by Puppet
+
+**/etc/puppet/manifests/site.pp** (On Master) The first manifest that the master parses when a client connects in order to produce the configuration to apply to it
+
+**/etc/puppet/modules** and **/usr/share/puppet/modules** (On Master) The default directories where modules are searched
 
 # Other configuration files:
 

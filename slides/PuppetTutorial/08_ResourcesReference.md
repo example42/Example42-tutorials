@@ -71,23 +71,23 @@ The main arguments:
 Files are the most configured resources on a system, you manage them with the **file** type:
   
     file { 'httpd.conf':
-      # (namevar) The file path
-        path      => '/etc/httpd/conf/httpd.conf,  
-      # Define the file type and if it should exist:
-      # 'present','absent','directory','link'
+        # (namevar) The file path
+        path      => '/etc/httpd/conf/httpd.conf',  
+        # Define the file type and if it should exist:
+        # 'present','absent','directory','link'
         ensure    => 'present',
-      # Url from where to retrieve the file content
+        # Url from where to retrieve the file content
         source    => 'puppet://[puppetfileserver]/<share>/path',
-      # Actual content of the file, alternative to source
-      # Typically it contains a reference to the template function
+        # Actual content of the file, alternative to source
+        # Typically it contains a reference to the template function
         content   => 'My content',
-      # Typical file's attributes
+        # Typical file's attributes
         owner     => 'root',
         group     => 'root',
         mode      => '0644',
-      # The sylink target, when ensure => link
+        # The sylink target, when ensure => link
         target    => '/etc/httpd/httpd.conf',
-      # Whether to recursively manage a directory (when ensure => directory)
+        # Whether to recursively manage a directory (when ensure => directory)
         recurse   => true,
     }
 
@@ -96,18 +96,18 @@ Files are the most configured resources on a system, you manage them with the **
 You can run plain commands using Puppet's **exec** type. Since Puppet applies it at every run, either the command can be safely run multiple times or you have to use one of the **creates**, **unless**, **onlyif**, **refreshonly** arguments to manage when to execute it.
   
     exec { 'get_my_file':
-      # (namevar) The command to execute
+        # (namevar) The command to execute
         command   => "wget http://mysite/myfile.tar.gz -O /tmp/myfile.tar.gz',
-      # The search path for the command. Must exist when command is not absolute
-      # Often set in Exec resource defaults
+        # The search path for the command. Must exist when command is not absolute
+        # Often set in Exec resource defaults
         path      => '/sbin:/bin:/usr/sbin:/usr/bin',        
-      # A file created by the command. It if exists, the command is not executed
+        # A file created by the command. It if exists, the command is not executed
         creates   => '/tmp/myfile.tar.gz',
-      # A command or an array of commands, if any of them returns an error
-      # the command is not executed
+        # A command or an array of commands, if any of them returns an error
+        # the command is not executed
         onlyif    => 'ls /tmp/myfile.tar.gz && false',
-      # A command or an array of commands, if any of them returns an error
-      # the command IS executed
+        # A command or an array of commands, if any of them returns an error
+        # the command IS executed
         unless    => 'ls /tmp/myfile.tar.gz',
     }
     
@@ -116,20 +116,20 @@ You can run plain commands using Puppet's **exec** type. Since Puppet applies it
 Puppet has native types to manage users and groups, allowing easy addition, modification and removal. Here are the main arguments of the **user** type:
   
     user { 'joe':
-      # (namevar) The user name
-        name      => 'joe,  
-      # The user's status: 'present','absent','role'
+        # (namevar) The user name
+        name      => 'joe',  
+        # The user's status: 'present','absent','role'
         ensure    => 'present',
-      # The user's  id
+        # The user's  id
         uid       => '1001',
-      # The user's primary group id
+        # The user's primary group id
         gid       => '1001',
-      # Eventual user's secondary groups (use array for many)
+        # Eventual user's secondary groups (use array for many)
         groups    => [ 'admins' , 'developers' ],
-      # The user's password. As it appears in /etc/shadow
-      # Use single quotes to avoid unanted evaluation of $* as variables
+        # The user's password. As it appears in /etc/shadow
+        # Use single quotes to avoid unanted evaluation of $* as variables
         password  => '$6$ZFS5JFFRZc$FFDSvPZSSFGVdXDlHe…',
-      # Typical users' attributes
+        # Typical users' attributes
         shell     => '/bin/bash',
         home      => '/home/joe',
         mode      => '0644',

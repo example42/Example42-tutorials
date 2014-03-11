@@ -99,7 +99,6 @@ Creation of nginx.conf with content retrived from different sources (first found
           "puppet:///modules/site/nginx.conf--${fqdn}",
           "puppet:///modules/site/nginx.conf-${role}",
           "puppet:///modules/site/nginx.conf" ],
-      }
     }
 
 

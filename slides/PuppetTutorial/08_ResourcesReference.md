@@ -145,7 +145,7 @@ Badly formatted example:
 
      file {
      "/etc/issue":
-         content => "Welcome to $fqdn"
+         content => "Welcome to $fqdn",
          ensure => present,
           mode => 644,
          group => "root",
@@ -154,10 +154,10 @@ Badly formatted example:
          
 Corrected style:
 
-     file { '/etc/issue':
-       ensure  => present,
-       content => "Welcome to ${fqdn}"
-       mode    => 0644,
-       group   => 'root',
-       path    => $issue_file_path,
-     }
+    file { '/etc/issue':
+      ensure  => present,
+      content => "Welcome to ${fqdn}",
+      mode    => 0644,
+      group   => 'root',
+      path    => $issue_file_path,
+    }

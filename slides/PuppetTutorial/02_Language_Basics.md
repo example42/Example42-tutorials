@@ -104,7 +104,7 @@ Creation of nginx.conf with content retrived from different sources (first found
 
 # Resource Abstraction Layer
 
-Resources are abstracted from the underlining OS
+Resources are abstracted from the underlying OS
 
 Resource Types have different providers for different OS
 

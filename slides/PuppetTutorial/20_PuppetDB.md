@@ -22,9 +22,12 @@ The configuration files are:
 
 ```/etc/sysconfig/puppetdb``` (```/etc/default/puppetdb``` on Debian) is the init script configuration file, here you can set JAVA settings like JAVA_ARGS or JAVA_BIN
 
+
 ```/etc/puppetdb/conf.d/``` is the configuration directory, here you may have different .ini files where to configure **[global]** settings, **[database]** backends, **[command-processing]** options, **[jetty]** parameters for HTTP connections and **[repl]** settings for remote runtime configurations (used for development/debugging).
 
+
 ```/etc/puppetdb/log4j.properties``` is the logging config file based on Log4j.
+
 
 ```/etc/puppet/puppetdb.conf``` is the configuration file for **Puppet** with the settings to be used by the PuppetDB terminus
 

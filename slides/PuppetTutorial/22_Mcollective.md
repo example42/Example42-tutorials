@@ -6,7 +6,7 @@ Based on 3 components:
 
   One or more central consoles, from where the **mco** command can be issued
 
-  The infrastructure nodes, where an **agent** receieves and executes the requested actions
+  The infrastructure nodes, where an **agent** receives and executes the requested actions
 
   A middleware **message broker**, that allows communication between master(s) and agents
 

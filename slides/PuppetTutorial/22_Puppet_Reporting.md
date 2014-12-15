@@ -3,7 +3,7 @@
 
   In reports Puppet stores information of what has changed on the system after a Puppet run
 
-  Reports are send from the client to the Master, if report is enabled
+  Reports are sent from the client to the Master, if report is enabled
 
     # On client's puppet.conf [agent]
     report = true

@@ -143,7 +143,7 @@ If a default value is set for an argument that value is used only when user has 
 
 # Using hiera from the command line
 
-Hira can be invoken via the command line to interrogate the given key's value:
+Hiera can be invoken via the command line to interrogate the given key's value:
 
         hiera dns_servers
         

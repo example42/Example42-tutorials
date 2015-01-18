@@ -1,6 +1,8 @@
 # Introduction to Hiera
 
-Hiera is a **key/value lookup tool** where variables used by all Puppet's nodes can be placed and evaluated differently according to a custom hierarchy using many different backends.
+Hiera is the **key/value lookup tool** of reference where to store Puppet user data.
+
+It provides an highly customizable way to lookup for parameters values based on a custom hierarchy using many different backends for data storage.
 
 It provides a command line tool ```hiera``` that you can use to interrogate direclty the Hiera data and functions to be used inside Puppet manifests: ```hiera()``` , ```hiera_array()``` , ```hiera_hash()``` , ```hiera_include()```
 
@@ -13,14 +15,14 @@ Currently version 1 is available, here is its [official documentation](http://do
 # Hiera configuration: hiera.yaml
 
 Hiera's configuration file is in yaml format and is called **hiera.yaml** here you define the hierarchy you want to use and the backends where data is placed, with backend specific settings.
- 
+
 Hiera's configuration file path is different according to how it's invoked:
 
 ### From the Command Line and Ruby code
 
 Default path: ```/etc/hiera.yaml```
 
-### From Puppet 
+### From Puppet
 
 Default path for Puppet OpenSource: ```/etc/puppet/hiera.yaml```
 
@@ -28,7 +30,7 @@ Default path for Puppet Enterprise: ```/etc/puppetlabs/puppet/hiera.yaml```
 
 It's good practice the symlink these alternative configuration files in order to avoid inconsistencies when using Hiera from the shell line or within Puppet manifests:
 
-        ln -s /etc/hiera.yaml /etc/puppet/hiera.yaml
+    ln -s /etc/hiera.yaml /etc/puppet/hiera.yaml
 
 ## Default configuration
 By default Hiera does not provide a configuration file. The default settings are equivalent to this:
@@ -39,8 +41,8 @@ By default Hiera does not provide a configuration file. The default settings are
       :datadir: /var/lib/hiera
     :hierarchy: common
     :logger: console
-    
-    
+
+
 # Hiera Backends
 
 One powerful feature of Hiera is that the actual key-value data can be retrieved from different backends.
@@ -51,11 +53,11 @@ With the ```:backends``` global configuration you define which backends to use, 
 
 **yaml** - Data is stored in yaml files (in the ```:datadir``` directory)
 
-**json** - Data is stored in json files (in the ```:datadir``` directory) 
+**json** - Data is stored in json files (in the ```:datadir``` directory)
 
 **puppet** - Data is defined in Puppet (in the ```:datasouce``` class)
 
-### Extra backends: 
+### Extra backends:
 Many additional backends are available, the most interesting ones are:
 
 [**gpg**](https://github.com/crayfishx/hiera-gpg) - Data is stored in GPG encripted yaml files
@@ -73,7 +75,7 @@ It's relatively easy to write custom backends for Hiera. Here are some [developm
 
 With the ```:hierarchy``` global setting you can define a string or an array of data sources which are checked in order, from top to bottom.
 
-When the same key is present on different data sources by default is chosen the top one. You can override this setting with the ```:merge_behavior``` global configuration. Check [this page](http://docs.puppetlabs.com/hiera/1/lookup_types.html#deep-merging-in-hiera--120) for details. 
+When the same key is present on different data sources by default is chosen the top one. You can override this setting with the ```:merge_behavior``` global configuration. Check [this page](http://docs.puppetlabs.com/hiera/1/lookup_types.html#deep-merging-in-hiera--120) for details.
 
 In hierarchies you can interpolate variables with the %{} notation (variables interpolation is possible also in other parts of hiera.yaml and in the same data sources).
 
@@ -86,7 +88,7 @@ This is an example Hierarchy:
           - "%{::osfamily}"
           - "%{::environment}"
           - common
- 
+
 Note that the referenced variables should be expressed with their fully qualified name. They are generally facts or Puppet's top scope variables (in the above example, **$::role** is not a standard fact, but is generally useful to have it (or a similar variable that identifies the kind of server) in your hierarchy).
 
 If you have more backends, for each backend is evaluated the full hierarchy.
@@ -101,7 +103,7 @@ The data stored in Hiera can be retrieved by the PuppetMaster while compiling th
 In your manifests you can have something like this:
 
         $my_dns_servers = hiera("dns_servers")
-        
+
 Which assigns to the variable ***$my_dns_servers*** (can have any name) the top value retrieved by Hiera for the key ***dns_servers***
 
 You may prefer, in some cases, to retrieve all the values retrieved in the hierarchy's data sources of a given key and not the first use, use hiera_array() for that.
@@ -117,7 +119,7 @@ All these hiera functions may receive additional parameters:
 
 Second argument: **default** value if no one is found
 
-Third argument: **override** with a custom data source added at the top of the configured hierarchy 
+Third argument: **override** with a custom data source added at the top of the configured hierarchy
 
         $my_dns_servers = hiera("dns_servers","8.8.8.8","$country")
 
@@ -146,7 +148,7 @@ If a default value is set for an argument that value is used only when user has 
 Hira can be invoken via the command line to interrogate the given key's value:
 
         hiera dns_servers
-        
+
 This will return the default value as no node's specific information is provided. More useful is to provide the whole facts' yaml of a node, so that the returned value can be based on the dynamic values of the hierarchy.
 On the Pupppet Masters the facts of all the managed clients are collected in $vardir/yaml/facts so this is the best place to see how Hiera evaluates keys for different clients:
 
@@ -158,14 +160,13 @@ You can also pass variables useful to test the hierarchy, directly from the comm
         hiera ntp_servers operatingsystem=Centos hostname=jenkins
 
 To have a deeper insight of Hiera operations use the debug (-d) option:
-        
+
         hiera dns_servers -d
 
 To make an hiera array lookup (equivalent to hiera_array()):
 
-        hiera dns_servers -a 
+        hiera dns_servers -a
 
 To make an hiera hash lookup (equivalent to hiera_hash()):
 
-        hiera openssh::settings -h 
-         
+        hiera openssh::settings -h

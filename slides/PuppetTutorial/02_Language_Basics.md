@@ -76,7 +76,7 @@ Installation of Apache package with the correct name for different OS
 
     package { 'apache':
       ensure => present,
-      name   => $operatingsystem ? {
+      name   => $::operatingsystem ? {
         /(?i:Ubuntu|Debian|Mint)/ => 'apache2',
         default                   => 'httpd',
       }
@@ -85,9 +85,9 @@ Installation of Apache package with the correct name for different OS
 Management of nginx service with parameters defined in module's variables
 
     service { 'nginx':
-      ensure     => $nginx::manage_service_ensure,
-      name       => $nginx::service,
-      enable     => $nginx::manage_service_enable,
+      ensure     => $::nginx::manage_service_ensure,
+      name       => $::nginx::service,
+      enable     => $::nginx::manage_service_enable,
     }
 
 Creation of nginx.conf with content retrived from different sources (first found is served)
@@ -96,7 +96,7 @@ Creation of nginx.conf with content retrived from different sources (first found
       ensure  => present,
       path    => '/etc/nginx/nginx.conf',
       source  => [
-          "puppet:///modules/site/nginx.conf--${fqdn}",
+          "puppet:///modules/site/nginx.conf--${::fqdn}",
           "puppet:///modules/site/nginx.conf-${role}",
           "puppet:///modules/site/nginx.conf" ],
     }
@@ -143,7 +143,7 @@ Example of a class **definition**:
       [...]
     }
 
-Usage (declaration) of "old style" classea (without parameters):
+Usage (declaration) of "old style" classes (without parameters):
 Even if a class is a singleton, you can include it multiple times: it's applied only once.
 
     include mysql
@@ -161,7 +161,7 @@ You can declare a parametrized class only once for a node
 
 Also called: **Defined resource types** or **defined types**
 
-Similar to parametrized classes but can be used multi times, with different parameters
+Similar to parametrized classes but can be used multiple times, with different parameters
 
 **Definition** example:
 
@@ -220,7 +220,7 @@ You can define custom variables in different ways:
 
         $role = 'mail'
 
-        $package = $operatingsystem ? {
+        $package = $::operatingsystem ? {
           /(?i:Ubuntu|Debian|Mint)/ => 'apache2',
           default                   => 'httpd',
         }
@@ -240,7 +240,8 @@ A node is identified by the PuppetMaster by its **hostname** or **certname**
 
 By default you can decide what classes to assign to a each server with the node statement
 
-## In the site manifest 
+## In the site manifest
+
 Using Puppet language ( Starting from ```/etc/puppet/manifests/site.pp``` ) you can define nodes with a syntax like:
 
     node 'web01' {
@@ -269,18 +270,19 @@ Puppet can query an external source to retrieve the classes and the variables to
 
 Common ENC are Puppet DashBoard, Foreman and Puppet Enterprise (where the functionality of ENC is enabled by default).
 
-To enable the usage of an ENC set this parameters in puppet.conf
+To enable the usage of an ENC set these parameters in puppet.conf
 
     external_nodes = /etc/puppet/node.rb # Script that queries the ENC
     node_terminus = exec                 # Enable the usage of the script
 
 ## With hiera_include
-Hiera provides a **hiera_include** function that allows the inclusion of classes as defined on Hiera. This is an emerging approach that is particularly useful when there's massive usage of Hiera as backend for Puppet data. 
+
+Hiera provides a **hiera_include** function that allows the inclusion of classes as defined on Hiera. This is an emerging approach that is particularly useful when there's massive usage of Hiera as backend for Puppet data.
 
 In ```/etc/puppet/manifests/site.pp``` just place:
 
-    hiera_include(classes)
-    
+    hiera_include('classes')
+
 and place, as an array, the classes to include in you Hiera data source under the key 'classes'.
 
 # The Catalog
@@ -295,4 +297,4 @@ The client uses the RAL (Resource Abstraction Layer) to execute the actual syste
 
 to their actual fullfillment on the system (```apt-get install openssh``` , ```yum install openssh``` ...).
 
-The catalog is saved by the client in ```/var/lib/puppet/client_yaml/catalog/$certname.yaml``` 
+The catalog is saved by the client in ```/var/lib/puppet/client_yaml/catalog/$certname.yaml```

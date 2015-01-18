@@ -11,7 +11,7 @@ We have seen that you declare resources with a syntax like:
 When you need to reference to them in your code the syntax is like:
 
     Type['name']
-    
+
 Some examples:
 
     file { 'motd': ... }
@@ -23,7 +23,7 @@ are referenced, respectively, with
     File['motd']
     Apache::Virtualhost['example42.com']
     Exec['download_myapp']
-     
+
 
 # Resource defaults
 It's possible to set default argument values for a resource in order to reduce code dumplication. The syntax is:
@@ -37,14 +37,14 @@ Common examples:
     Exec {
       path => '/sbin:/bin:/usr/sbin:/usr/bin',
     }
-    
+
     File {
       mode  => 0644,
       owner => 'root',
       group => 'root',
     }
 
-Resource defaults can be overriden when declaring a specific resource of the same type. 
+Resource defaults can be overriden when declaring a specific resource of the same type.
 
 Note that the "Area of Effect" of resource defaults might bring unexpected results. The general suggestion is:
 
@@ -60,9 +60,9 @@ It is possible to have an inheritance structure for nodes, so that resources def
 An example:
 
     node 'general' { ... }
-    
+
     node 'www01' inherits general { ... }
-    
+
 In Puppet versions prior to 3, it was possibile to use nodes inheritance also to set variables and override them at different inheritance levels, and refer to these variables with their "short" name (not fully qualified).
 When using this approach it was important to avoid the inclusion on classes in the inheritance tree, since some variables could be evaluated in an unexpected way.
 
@@ -83,13 +83,13 @@ Moreover the child class can override the arguments of a resource defined in the
         content => template('puppet/client/puppet.conf'),
       }
     }
-    
+
     class puppet::server inherits puppet {
       File['/etc/puppet/puppet.conf'] {
         content => template('puppet/server/puppet.conf'),
       }
     }
-    
+
 
 # Run Stages
 
@@ -100,31 +100,31 @@ Puppet (> 2.6) provides a default **main** stage, you can add any number or furt
     stage { 'pre':
       before => Stage['main'],
     }
-    
+
 Which is equivalent to:
 
     stage { 'pre': }
     Stage['pre'] -> Stage['main']
-    
+
 You can assign any class to a defined stage with the stage metaparameter:
 
     class { 'yum':
       stage => 'pre',
     }
- 
+
 Do not abuse of run stages (be vary of dependency cycles)!
 
 [Official documentation on Run Stages](http://docs.puppetlabs.com/puppet/latest/reference/lang_run_stages.html)
- 
+
 # Metaparameters
 Metaparameters are parameters available to any resource type, they can be used for different purposes:
 
  Manage dependencies (**before**, **require**, **subscribe**, **notify**, **stage**)
- 
+
  Manage resources' application policies (**audit**, **noop**, **schedule**, **loglevel**)
- 
+
  Add information to a resource (**alias**, **tag**)
- 
+
 [Official documentation on Metaparameters](http://docs.puppetlabs.com/puppet/latest/reference/metaparameter.html)
 
 
@@ -134,9 +134,9 @@ Puppet language is declarative and not procedural: it defines states, the order 
 To manage resources ordering, there are 3 different methods, which can cohexist:
 
   1 - Use the metaparameters **before**, **require**, **notify**, **subscribe**
-  
+
   2 - Use the **Chaining arrows** (compared to the above metaparamers: **->** , **<-** , **<~** , **~>**)
-  
+
   3 - Use run stages
 
 # Managing dependencies
@@ -148,29 +148,29 @@ This can be expressed with metaparameters:
     package { 'exim':
       before => File['exim.conf'],  
     }
-    
+
     file { 'exim.conf':
       notify => Service['exim'],
     }
-    
+
     service { 'exim':
     }
-    
-which is equivalent to 
+
+which is equivalent to
 
     Package['exim'] -> File['exim.conf'] ~> Service['exim']
-    
+
 But the same ordering can be expressed using the alternative reverse metaparameters:
 
     package { 'exim':
     }
-    
+
     file { 'exim.conf':
       require => Package['exim'],
     }
-    
+
     service { 'exim':
-      subscribe => File['exim.conf'], 
+      subscribe => File['exim.conf'],
     }
 
 which can also be expressed like:
@@ -188,13 +188,13 @@ Selectors therefore just returns values and are not used to manage conditionally
 Case statements are NOT used inside resource declarations.
 
 **if elsif else** conditionals, like case, are used to execute different blocks of code and can't be used inside resources declarations.
-You can can use any of Puppet's comparison expressions and you can combine more than one for complex patterns matching. 
+You can can use any of Puppet's comparison expressions and you can combine more than one for complex patterns matching.
 
 **unless** is somehow the opposite of **if**. It evaluates a boolean condition and if it's *false* it executes a block of code. It doesn't have elsif / else clauses.
 
 # Sample: Assign a variable value
 
-#### Selector for variable's assignement 
+#### Selector for variable's assignement
 
      $package_name = $osfamily ? {
        'RedHat' => 'httpd',
@@ -207,9 +207,9 @@ You can can use any of Puppet's comparison expressions and you can combine more 
      case $::osfamily {
        'Debian': { $package_name = 'apache2' }
        'RedHat': { $package_name = 'httpd' }
-       default: { notify { "Operating system $::operatingsystem not supported" } } 
+       default: { notify { "Operating system $::operatingsystem not supported" } }
      }
-          
+
 #### if elsif else
 
      if $::osfamily == 'Debian' {       $package_name = 'apache2'
@@ -226,19 +226,19 @@ Puppet supports some common comparison operators: ```==  !=   <  >  <=  >=  =~  
      if $::kernel != 'Linux' { [ ... ] }
 
      if $::uptime_days > 365 { [ ... ] }
-     
+
      if $::operatingsystemrelease <= 6 { [ ... ] }
 
 
 #### in operator
 The in operator checks if a string present in another string, an array or in the keys of an hash
- 
+
      if '64' in $::architecture
- 
+
      if $monitor_tool in [ 'nagios' , 'icinga' , 'sensu' ]
 
 #### Expressions combinations
-It's possible to combine multiple comparisons with **and** and **or** 
+It's possible to combine multiple comparisons with **and** and **or**
 
     if ($::osfamily == 'RedHat') and ($::operatingsystemrelease == '5') { [ ... ] }
 
@@ -253,7 +253,7 @@ Resources are declared with the special @@ notation which marks them as exported
     @@host { $::fqdn:
       ip  => $::ipaddress,
     }
-    
+
     @@concat::fragment { "balance-fe-${::hostname}",
       target  => '/etc/haproxy/haproxy.cfg',
       content => "server ${::hostname} ${::ipaddress} maxconn 5000"

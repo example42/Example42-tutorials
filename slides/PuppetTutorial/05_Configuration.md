@@ -2,14 +2,14 @@
 
 ### Masterless - puppet apply
 
-Your Puppet code (manifests) is applied directly onthe target system.
+Your Puppet code (manifests) is applied directly on the target system.
 
 No need of a complete infrastructure.
 
 Have to distribute manifests and modules to the managed servers.
 
-Command used ```puppet apply``` (generally as root)
- 
+Command used: ```puppet apply``` (generally as root)
+
 ### Master / Client - puppet agent
 
 You have clients, where Puppet client is installed and Masters where Puppet server resides
@@ -66,8 +66,8 @@ Command used on the server: ```puppet master```  (generally as **puppet**)
 
 # Certificates management
 
-  On the Master you can use puppet cert to manage certificates
-  
+  On the Master you can use ```puppet cert``` to manage certificates
+
   List the (client) certificates to sign:
 
     puppet cert list
@@ -75,31 +75,31 @@ Command used on the server: ```puppet master```  (generally as **puppet**)
   List all certificates: signed (+), revoked (-), to sign ( ):
 
     puppet cert list --all
-    
+
   Sign a client certificate:
-  
+
     puppet cert sign <certname>
-    
+
   Remove a client certificate:
-  
+
     puppet cert clean <certname>
-    
+
   Client stores its certificates and the server's public one in ```$vardir/ssl**``` (```/var/lib/puppet/ssl``` on Puppet OpenSource)
-  
+
   Server stores clients public certificates and in ```$vardir/ssl/ca``` (```/var/lib/puppet/ssl/ca```). DO NOT remove this directory.
-  
+
 # Certificates management - First run
-  
+
 By default the first Puppet run on a client fails:
 
     client # puppet agent -t
            # "Exiting; no certificate found and waitforcert is disabled"
-    
+
 An optional ````--waitforcert 60``` parameter makes client wait 60 seconds before giving up.
-  
+
 The server has received the client's CSR which has to be manually signed:
 
-    server # puppet cert sign <certname> 
+    server # puppet cert sign <certname>
 
 Once signed on the Master, the client can connect and receive its catalog:
 
@@ -108,15 +108,15 @@ Once signed on the Master, the client can connect and receive its catalog:
 
 If you have issues with certificates (reinstalled client or other certs related problemes):
 
-Be sure client and servet times are synced
+Be sure client and server times are synced
 
 Clean up the client certificate. On the client remove it:
 
     client # mv /var/lib/puppet/ssl /var/lib/puppet/ssl.old
-    
+
 On the Master clean the old client certificate:
 
-    server # puppet cert clean <certname> 
+    server # puppet cert clean <certname>
 
 
 # Puppet configuration: puppet.conf
@@ -153,7 +153,7 @@ To view all or a specific configuration setting:
 
     puppet config print all
     puppet config print modulepath
-    
+
 ### Important options under **[main]** section:
 
   **vardir**: Path where Puppet stores dynamic data.
@@ -161,21 +161,21 @@ To view all or a specific configuration setting:
   **ssldir**: Path where SSL certifications are stored.
 
 ### Under **[agent]** section:
-  
+
   **server**: Host name of the PuppetMaster. (Default: puppet)
-  
+
   **certname**: Certificate name used by the client. (Default is the hostname)
-  
+
   **runinterval**: Number of minutes between Puppet runs, when running as service. (Default: 30)
-  
+
   **report**: If to send Puppet runs' reports to the **report_server. (Default: true)
 
 ### Under **[master]** section:
-  
+
   **autosign**: If new clients certificates are automatically signed. (Default: false)
-  
+
   **reports**: How to manage clients' reports (Default: store)
-  
+
   **storeconfigs**: If to enable store configs to support exported resources. (Default: false)
 
 Full [configuration reference](http://docs.puppetlabs.com/references/latest/configuration.html)  on the official site.
@@ -187,7 +187,7 @@ All configuration options can be overriden by command-line options.
 
 A very common option used when you want to see immediately the effect of a Puppet run (it's actually the combination of: --onetime, --verbose, --ignorecache, --no-daemonize, --no-usecacheonfailure, --detailed-exit-codes, --no-splay, and --show_diff):
 
-    puppet agent --test
+    puppet agent --test # Can be abbreviate to -t
 
 Run puppet agent in foreground and debug mode:
 
@@ -216,9 +216,14 @@ Wait for certificate approval (by default 120 seconds) in the first Puppet run (
 
 **/var/lib/puppet/clientbucket** contains backup copies of the files changed by Puppet
 
-**/etc/puppet/manifests/site.pp** (On Master) The first manifest that the master parses when a client connects in order to produce the configuration to apply to it
+**/etc/puppet/manifests/site.pp** (On Master) The first manifest that the master parses when a client connects in order to produce the configuration to apply to it (on Puppet < 3.6)
+
+**/etc/puppet/environments/production/manifests/site.pp** (On Master) The first manifest that the master parses when using **directory environments** (recommended from Puppet 3.6)
 
 **/etc/puppet/modules** and **/usr/share/puppet/modules** (On Master) The default directories where modules are searched
+
+**/etc/puppet/environments/production/modules** (On Master) An extra place where modules are looked for when using **directory environments**
+
 
 # Other configuration files:
 
@@ -238,5 +243,4 @@ Settings for connection to PuppetDB, if used. [Details](http://docs.puppetlabs.c
 
 These are other configuration files for specific functions. [Details](http://docs.puppetlabs.com/guides/configuring.html)
 
-
-
+#### **/etc/puppet/environments/production/environment.conf** contains environment specific settings

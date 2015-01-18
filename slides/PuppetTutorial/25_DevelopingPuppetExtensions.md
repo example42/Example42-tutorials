@@ -20,7 +20,7 @@
 
   Resource types can be defined in Puppet language or in Ruby as plugins.
 
-  Ruby types require one or more **providers** whic hmanage low-lovel interaction with the underlining OS to provide the more abstact resource defined in Types.
+  Ruby types require one or more **providers** which manage low-lovel interaction with the underlining OS to provide the more abstact resource defined in Types.
 
   An example of a type with many providers is package, which has more than 20 providers that manage packages on different OS.
 

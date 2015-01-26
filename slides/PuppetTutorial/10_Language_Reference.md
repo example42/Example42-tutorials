@@ -20,7 +20,7 @@ Upper char is used also for subclasses/defines with :: separator:
  
 
 # Resource defaults
-It's possible to set default argument values for a resource in order to reduce code dumplication. The syntax is:
+It's possible to set default argument values for a resource in order to reduce code duplication. The syntax is:
 
     Type {
       argument => value,
@@ -38,7 +38,7 @@ Common examples:
       group => 'root',
     }
 
-Resource defaults can be overriden when declaring a specific resource of the same type. 
+Resource defaults can be overien when declaring a specific resource of the same type. 
 
 Note that the "Area of Effect" of resource defaults might bring unexpected results. The general suggestion is:
 

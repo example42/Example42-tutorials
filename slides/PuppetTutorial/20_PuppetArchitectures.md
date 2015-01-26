@@ -1,70 +1,65 @@
-# Masterless setup
+# Components of a Puppet architecture
 
-  Puppet manifests are deployed directly on nodes and applied locally:
+### Tasks we deal with
 
-    puppet apply --modulepath /my/modules/path /my/manifest/file.pp
+Definition of the **classes** to be included in each nodeDefinition of the **parameters** to use for each nodeDefinition of the configuration **files** provided to the nodes
 
-  More fine grained control on what goes in production for what nodes
+### Components
 
-  Ability to trigger multiple truly parallel Puppet runs
+**/etc/puppet/manifests/site.pp** - The default manifests loaded by the Master
 
-  No single point of failure, no Master performance issues
+**ENC** - The (optional) Enternal Node Classifier
 
-  Need to define a fitting deployment workflow. Hints: [Rump](https://github.com/railsmachine/rump) - [supply_drop](https://github.com/pitluga/supply_drop)
+**ldap** - (Optional) LDAP backend
 
-  With Puppet > 2.6 you can use file sources urls like:
+**Hiera** - Data key-value backend
 
-    puppet:///modules/example42/apache/vhost.conf
+**Public modules** - Public shared modules
 
-    # they point to
-    $modulepath/example42/apache/vhost.conf
+**Site modules** - Local custom modules
 
-  StoreConfigs usage requires a common Mysql (or Puppet DB) backend... Write permissions must be granted to all nodes
+# Where to define classes
 
+The classes to include in each node can be defined on:
 
-# Master Slave Setup
+**/etc/puppet/manifests/site.pp** - Top or Node scope variables
 
-  A Puppet server (running as 'puppet') listening on 8140 on the PuppetMaster
+**ENC** - Under the classes key in the provided YAML
 
-  A Puppet client (running as 'root') on each managed node
+**ldap** - puppetClass attribute
 
-  Client can be run as a service (default), via cron (with random delays), manually or via MCollective
+**Hiera** - Via the ```hiera_include()``` function
 
-  Client and Server have to share SSL certificates. New client certificates must be signed by the Master CA
+**Site modules** - In roles and profiles or other grouping classes
 
-  It's possible to enable automatic clients certificates signing on the Master (may involve security issues)
+# Where to define parameters
 
-    # On puppet.conf [master]
-    autosign = true # Default = false
+The classes to include in each node can be defined on:
 
+**/etc/puppet/manifests/site.pp** - Under the node statement
 
-# Certificates management
+**ENC** - Following the ENC logic
 
-  On the Master you can use puppet cert to manage certificates
+**ldap** - puppetVar attribute
 
-    puppet cert --list       # List the (client) certificates to sign
-    puppet cert --list --all # List all certificates: signed (+), revoked (-), to sign ( )
-    puppet cert --sign <certname> # Sign the certificate of the client
+**Hiera** - Via the ```hiera()```, ```hiera_hash()```, ```hiera_array()``` functions of Puppet 3 Data Bindings
 
-  By default the first Puppet run on a client fails:
+**Shared  modules** - OS related settings
 
-    client # puppet agent -t    # "Exiting; no certificate found and waitforcert is disabled"
-    # An optional --waitforcert 60 parameter makes client wait 60 seconds before giving up
+**Site modules** - Custom and logical settings
 
-    server # puppet cert --list # The client hostname or certname appears
+**Facts** - Facts calculated on the client
 
-    server # puppet cert --sign <client> # The client's certificate is signed, now it's trusted
+# Where to define files
 
-    client # puppet agent -t    # The client fetch its catalog now
-        
-  Server accepts only one certificate for hostname, if a server is destroyed and recreated with the same hostnae the old certificate has to be removed
+**Shared  modules** - Default templates populated via module's params
 
-    server # puppet cert --clean <client> # The old cert is removed, a new signing is required
+**Site modules** - All custom static files and templates
 
-  Client stores its certificates and the server's public one in **$vardir/ssl** (/var/lib/puppet/ssl on Puppet OpenSource)
-  If you have issues with certificates, this directory can be deleted, it's recreated at puppet run (the relevant cert must be cleaned on the master too)
+**Hiera** - Via the **hiera-file** plugin
 
-  Server stores clients public certificates and in **$vardir/ssl/ca** (/var/lib/puppet/ssl/ca). DO NOT remove this directory.
+**Fileserver** custom mount points
+
 
 
 # Anatomy of a Puppet Run - Part 1: Catalog compilation
@@ -122,32 +117,6 @@
   Recommended: Couple Puppet environments with code branches [More info](http://puppetlabs.com/blog/git-workflow-and-puppet-environments/)
 
 
-# Testing Puppet code
-
-  Testing can be done at different levels:
-
-  Syntax checks are easy and can be automated
-  Review [here](http://projects.puppetlabs.com/projects/1/wiki/Puppet_Version_Control) for hints on how to hook code checks when committing the code
-
-    puppet parser validate mysql/manifests/init.pp
-
-  Checks on the code style with puppet-lint
-  Not required, but useful for a coherent code style layout according to PuppetLabs guidelines
-
-    gem install puppet-lint
-    puppet-lint mysql/manifests/init.pp
-
-  Checks on the code logic and the expected catalog
-  Tools like Rpec-Puppet or Cucumber-Puppet can verify code effects after catalog compilation
-
-  Check on the impact of a Puppet run on a system
-  The most important, and difficult to cover.
-
-    Canary nodes
-
-    Early fail notification
-
-    Split environments
 
 
 # Puppet Security considerations

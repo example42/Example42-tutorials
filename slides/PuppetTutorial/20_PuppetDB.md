@@ -22,9 +22,12 @@ The configuration files are:
 
 ```/etc/sysconfig/puppetdb``` (```/etc/default/puppetdb``` on Debian) is the init script configuration file, here you can set JAVA settings like JAVA_ARGS or JAVA_BIN
 
+
 ```/etc/puppetdb/conf.d/``` is the configuration directory, here you may have different .ini files where to configure **[global]** settings, **[database]** backends, **[command-processing]** options, **[jetty]** parameters for HTTP connections and **[repl]** settings for remote runtime configurations (used for development/debugging).
 
+
 ```/etc/puppetdb/log4j.properties``` is the logging config file based on Log4j.
+
 
 ```/etc/puppet/puppetdb.conf``` is the configuration file for **Puppet** with the settings to be used by the PuppetDB terminus
 
@@ -75,4 +78,39 @@ You can access a specific version of the API using the relevant prefix:
 Queries to the REST endpoints can define search scope and limitations for the given endpoint. The query are sent as an "URL-encoded JSON array in prefix notation". Check the online [tutorial](http://docs.puppetlabs.com/puppetdb/latest/api/query/tutorial.html) for details.
 
 # Using Puppetdbquery module
+
+The [PuppetDbQueryModule](https://github.com/dalen/puppet-puppetdbquery) is developed by a community member, Erik Dalen, and is the most used and useful module available to work with PuppetDB: it provides command lines tools (as Puppet Faces), functions to query PuppetDB and a PuppetDB based Hiera backend.
+
+## Query format
+All the queries you can do with this module are in the format
+
+    Type[Name]{attribute1=foo and attribute2=bar}
+
+by default they are made on normal resources, use the @@ prefix to query exported resources.
+
+The comparison operators are: **=**, **!=**, **>**, **<** and **~**
+
+The expressions can be combined with **and**, **not** and **or**
+
+# Using Puppetdbquery module
+
+## Command line
+
+The module introduces, as a Puppet face, the **query** command:
+
+    puppet help query
+    puppet query facts '(osfamily=RedHat and operatingsystemversion=6)'
+
+## Functions
+The functions provided by the module can be used inside manifests to populate the catalog with data retrieved on PuppetDB.
+
+**query_nodes** takes 2 arguments: the query to use and (optional) the fact to return (by default it provides the certname). It returns an array:
+
+    $webservers = query_nodes('osfamily=Debian and Class[Apache]')
+    $webserver_ip = query_nodes('osfamily=Debian and Class[Apache]', ipaddress)
+
+
+**query_facts** requires 2 arguments: the query to use to discover nodes and the list of facts to return for them. It returns a nested hash in JSON format.
+
+    query_facts('Class[Apache]{port=443}', ['osfamily', 'ipaddress'])
 

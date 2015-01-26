@@ -6,3 +6,4 @@ metadata.json
 pkg/
 .gradle
 build
+.DS_Store

@@ -1,6 +1,33 @@
 # Resource references
+In Puppet any resource is uniquely identified by its type and its name.
+You can't have 2 resources of the same type with the same name in a catalog.
 
-# Nodes and class inheritance
+We have seen that you declare resources with a syntax like:
+
+    type { 'name':
+      arguments => values,
+    }
+
+When you need to reference to them in your code the syntax is like:
+
+    Type['name']
+    
+Some examples:
+
+    file { 'motd': ... }
+    apache::virtualhost { 'example42.com': .... }
+    exec { 'download_myapp': .... }
+
+are referenced, respectively, with
+
+    File['motd']
+    Apache::Virtualhost['example42.com']
+    Exec['download_myapp']
+
+# Nodes inheritance
+
+# Class inheritance
+
 
 # Run Stages
 

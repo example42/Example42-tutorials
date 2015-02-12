@@ -26,7 +26,7 @@ are referenced, respectively, with
 
 
 # Resource defaults
-It's possible to set default argument values for a resource in order to reduce code dumplication. The syntax is:
+It's possible to set default argument values for a resource in order to reduce code duplication. The syntax is:
 
     Type {
       argument => value,
@@ -63,7 +63,7 @@ An example:
 
     node 'www01' inherits general { ... }
 
-In Puppet versions prior to 3, it was possibile to use nodes inheritance also to set variables and override them at different inheritance levels, and refer to these variables with their "short" name (not fully qualified).
+In Puppet versions prior to 3, it was possible to use nodes inheritance also to set variables and override them at different inheritance levels, and refer to these variables with their "short" name (not fully qualified).
 When using this approach it was important to avoid the inclusion on classes in the inheritance tree, since some variables could be evaluated in an unexpected way.
 
 This is no more possible because variables are not more dynamically scoped, and generally speaking nodes inheritance has been deprecated.

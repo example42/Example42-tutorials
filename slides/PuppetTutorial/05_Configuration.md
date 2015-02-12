@@ -1,18 +1,20 @@
 # Operational modes
 
-### Masterless - puppet apply
+## Masterless - puppet apply
 
-Your Puppet code (manifests) is applied directly on the target system.
+Your Puppet code (written in manifests) is applied directly on the target system.
 
-No need of a complete infrastructure.
+No need of a complete client-server infrastructure.
 
-Have to distribute manifests and modules to the managed servers.
+Have to distribute manifests and modules to the managed nodes.
 
 Command used: ```puppet apply``` (generally as root)
 
-### Master / Client - puppet agent
+## Master / Client - puppet agent
 
-You have clients, where Puppet client is installed and Masters where Puppet server resides
+You have clients, your managed nodes, where Puppet client is installed.
+
+And you have one or more Masters where Puppet server runs as a service
 
 Client/Server communication is via https (**port 8140**)
 
@@ -27,7 +29,7 @@ Command used on the server: ```puppet master```  (generally as **puppet**)
 
   Puppet manifests are deployed directly on nodes and applied locally:
 
-    puppet apply --modulepath /modules/ /manifest/file.pp
+    puppet apply --modulepath /modules/ /manifests/file.pp
 
   More fine grained control on what goes in production for what nodes
 
@@ -44,12 +46,11 @@ Command used on the server: ```puppet master```  (generally as **puppet**)
     # they point to
     $modulepath/example42/apache/vhost.conf
 
-  StoreConfigs usage requires a common Mysql (or Puppet DB) backend... Write permissions must be granted to all nodes
-
+  StoreConfigs usage require access to Puppet DB from every node
 
 # Master / Client Setup
 
-  A Puppet server (running as 'puppet') listening on 8140 on the PuppetMaster
+  A Puppet server (running as 'puppet') listening on 8140 on the Puppet Master (the server )
 
   A Puppet client (running as 'root') on each managed node
 
@@ -57,11 +58,7 @@ Command used on the server: ```puppet master```  (generally as **puppet**)
 
   Client and Server have to share SSL certificates. New client certificates must be signed by the Master CA
 
-  It's possible to enable automatic clients certificates signing on the Master (may involve security issues)
-
-    # On puppet.conf [master]
-    autosign = true # Default = false
-
+  It's possible to enable automatic clients certificates signing on the Master (be aware of security concerns)
 
 
 # Certificates management
@@ -164,7 +161,7 @@ To view all or a specific configuration setting:
 
   **server**: Host name of the PuppetMaster. (Default: puppet)
 
-  **certname**: Certificate name used by the client. (Default is the hostname)
+  **certname**: Certificate name used by the client. (Default is its fqdn)
 
   **runinterval**: Number of minutes between Puppet runs, when running as service. (Default: 30)
 
@@ -199,7 +196,7 @@ Run a dry-run puppet without making any change to the system:
 
 Run puppet using an environment different from the default one:
 
-    puppet agent --environment testing
+    puppet agent --test --environment testing
 
 Wait for certificate approval (by default 120 seconds) in the first Puppet run (useful during automated first fime installation if PuppetMaster's autosign is false):
 
@@ -216,9 +213,9 @@ Wait for certificate approval (by default 120 seconds) in the first Puppet run (
 
 **/var/lib/puppet/clientbucket** contains backup copies of the files changed by Puppet
 
-**/etc/puppet/manifests/site.pp** (On Master) The first manifest that the master parses when a client connects in order to produce the configuration to apply to it (on Puppet < 3.6)
+**/etc/puppet/manifests/site.pp** (On Master) The first manifest that the master parses when a client connects in order to produce the configuration to apply to it (Default on Puppet < 3.6 where are used **config-file environments**)
 
-**/etc/puppet/environments/production/manifests/site.pp** (On Master) The first manifest that the master parses when using **directory environments** (recommended from Puppet 3.6)
+**/etc/puppet/environments/production/manifests/site.pp** (On Master) The first manifest that the master parses when using **directory environments** (recommended from Puppet 3.6 and default on Puppt >= 4)
 
 **/etc/puppet/modules** and **/usr/share/puppet/modules** (On Master) The default directories where modules are searched
 
@@ -243,4 +240,6 @@ Settings for connection to PuppetDB, if used. [Details](http://docs.puppetlabs.c
 
 These are other configuration files for specific functions. [Details](http://docs.puppetlabs.com/guides/configuring.html)
 
-#### **/etc/puppet/environments/production/environment.conf** contains environment specific settings
+#### **/etc/puppet/environments/production/environment.conf**
+
+Contains environment specific settings

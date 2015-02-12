@@ -94,8 +94,8 @@
 
   Data Separation
 
-    - Configuration data is defined outside the module (or even Puppet manifests)
-    - Module behavior is managed via APIs
+    - Configuration data is defined outside the module
+    - Module behavior can be managed via parameters
     - Allow module's extension and override via external data
 
   Reusability
@@ -115,7 +115,75 @@
     - Limit cross-module dependencies
     - Allow easy modules cherry picking
     - Be self contained, do not interfere with other modules' resources
- 
+
+
+# Modules reusability patterns: Template + Options hash
+
+Check this [blog post](http://www.example42.com/2014/10/29/reusability-features-every-module-should-have/) for details.
+
+Classes and defines should expose parameters that allow to override the used templates and set a custom hash of configurations.
+
+    class redis (
+      $config_file_template = 'redis/redis.conf.erb',
+      $options_hash         = {},
+    ) {
+      file { '/etc/redis/redis.conf':
+        content => template($config_file_template),
+      }
+    }
+
+
+# Template + Options hash example:
+
+Given the previous class definition, we can configure it with this sample Hiera data, in YAML format:
+
+    ---
+    redis::config_file_template: 'site/redis/redis.conf.erb'
+    redis::options_hash:
+      port: '12312'
+      bind: '0.0.0.0'
+      masterip: '10.0.42.50'
+      masterport: '12350'
+      slave: true
+
+The referenced template stays in our site module, in ```$modulepath/site/templates/redis/redis.conf.erb``` and may look like:
+
+    port <%= @options_hash['port'] %>
+    bind <%= @options_hash['bind'] %>
+    <% if @options_hash['slave'] == true -%>
+    slaveof <%= @options_hash['masterip'] %> <%= @options_hash['masterport'] %>
+    <% end -%>
+
+
+# Modules reusability patterns: Users override on included classes
+
+Sometimes modules need some prerequisites or have to manage resources related to other applications or may provide the same functionality in diffret ways.
+Whenever this is needed, let users provide custom versions for the relevant classes.
+
+This module manages the Puppet Master in a dedicated class an exposes a parameter that allows users to provide a custom class (or an alternative class eventually provided by the same module) instead of the default one.
+
+    class puppet (
+      $server_class = '::puppet::server',
+    ) {
+
+      if $server_class {
+        include $server_class
+      }
+    }
+
+Using Hiera we ca override with:
+
+    ---
+    puppet::server_class: '::site::puppet::haserver'
+
+This implies that we need to create in ```$modulepath/site/manifests/puppet/haserver.pp``` a class like:
+
+    class ::site::puppet::haserver {
+      # The resources for our HA Puppet Master setup  
+    }
+
+
+
 # Testing Modules
 Puppet code testing can be done at different levels with different tools
 
@@ -156,4 +224,3 @@ Puppet code testing can be done at different levels with different tools
     class apache {
       ...
     }
-

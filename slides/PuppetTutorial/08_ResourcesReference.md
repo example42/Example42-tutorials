@@ -29,11 +29,11 @@ To show all the available resource types:
 
 To interactively inspect and modify your system's resources
 
-    puppet describe <type> [name]
+    puppet resource <type> [name]
 
 Remember you can use the same command to CHANGE your resources attibutes:
 
-    puppet describe <type> <name> [attribute=value] [attribute2=value2]
+    puppet resource <type> <name> [attribute=value] [attribute2=value2]
 
 
 # Managing packages

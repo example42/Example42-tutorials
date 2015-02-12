@@ -139,7 +139,7 @@ To manage resources ordering, there are 3 different methods, which can cohexist:
 
   3 - Use run stages
 
-# Managing dependencies
+# Managing dependencies - before | notify
 
 In a typical Package/Service/Configuration file example you want the package to be installed first, configure it and then start the service, eventually managing its restart if the config file changes.
 
@@ -160,7 +160,10 @@ which is equivalent to
 
     Package['exim'] -> File['exim.conf'] ~> Service['exim']
 
-But the same ordering can be expressed using the alternative reverse metaparameters:
+
+# Managing dependencies - require | subscribe
+
+The previous example can be expressed using the alternative reverse metaparameters:
 
     package { 'exim':
     }
@@ -216,9 +219,8 @@ You can can use any of Puppet's comparison expressions and you can combine more 
      } elsif $::osfamily == 'RedHat' {       $package_name = 'httpd'
      } else {       notify { "Operating system $::operatingsystem not supported" }     }
 
-# Comparing strings
+# Comparing strings: operators
 
-#### Comparison operators
 Puppet supports some common comparison operators: ```==  !=   <  >  <=  >=  =~  !~``` and the somehow less common ```in```
 
      if $::osfamily == 'Debian' { [ ... ] }
@@ -230,19 +232,26 @@ Puppet supports some common comparison operators: ```==  !=   <  >  <=  >=  =~  
      if $::operatingsystemrelease <= 6 { [ ... ] }
 
 
-#### in operator
+# Comparing strings: in operator and combinations
+
+## in operator
 The in operator checks if a string present in another string, an array or in the keys of an hash
 
      if '64' in $::architecture
 
      if $monitor_tool in [ 'nagios' , 'icinga' , 'sensu' ]
 
-#### Expressions combinations
+## Expressions combinations
 It's possible to combine multiple comparisons with **and** and **or**
 
-    if ($::osfamily == 'RedHat') and ($::operatingsystemrelease == '5') { [ ... ] }
+    if ($::osfamily == 'RedHat')
+    and ($::operatingsystemrelease == '5') {
+       [ ... ]
+    }
 
-    if (operatingsystem == 'Ubuntu') or ($::operatingsystem == 'Mint') { [ ...] }
+    if ($::osfamily == 'Debian') or ($::osfamily == 'RedHat') {
+       [ ...]
+    }
 
 # Exported resources
 

@@ -69,20 +69,16 @@
   Debian, Ubuntu
   Available by default
 
-    # On clients (nodes):
-    apt-get install puppet
+    apt-get install puppet       # On clients (nodes)
 
-    # On server (master):
-    apt-get install puppetmaster
+    apt-get install puppetmaster # On server (master)
 
   RedHat, Centos, Fedora
   Add EPEL repository or RHN Extra channel
 
-    # On clients (nodes):
-    yum install puppet
+    yum install puppet        # On clients (nodes)
 
-    # On server (master):
-    yum install puppet-server
+    yum install puppet-server # On server (master)
 
   Use [PuppetLabs repositories](http://docs.puppetlabs.com/guides/puppetlabs_package_repositories.html) for latest updates
 
@@ -111,4 +107,4 @@ Check also [Puppet Language History](http://docs.puppetlabs.com/guides/language_
 
   3.2.x  - Future parser (experimental, will be default in Puppet 4)
 
-  4.x.x  - Release in February 2015. New parses, new type system and lot or changes, some backwards incompatbilities
+  4.x.x  - Release in early 2015. New parser, new type system and lot of changes, some backwards incompatibilities

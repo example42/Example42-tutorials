@@ -1,3 +1,9 @@
+# Puppet reporting - Overview
+
+### Reporting overview
+
+### Understanding puppet run output
+
 
 # Reporting
 
@@ -31,9 +37,7 @@
   The File[/etc/motd] resource is defined in the class example42::commonsetup
   A diff is shown of what has changed (the diff appears when running puppet agent -t in interactive mode)
   The original file has been filebucketed (saved) with checksum 623bcd5f8785251e2cd00a88438d6d08
-  You can retrieve the original file in /var/lib/puppet/clientbucket/6/2/3/b/c/d/5/f/623bcd5f8785251e2cd00a88438d6d08/contents
-  You can search for all the old versions of /etc/motd with
+  We can retrieve the original file in /var/lib/puppet/clientbucket/6/2/3/b/c/d/5/f/623bcd5f8785251e2cd00a88438d6d08/contents
+  We can search for all the old versions of /etc/motd with
 
     grep -R '/etc/motd' /var/lib/puppet/clientbucket/*
-
-

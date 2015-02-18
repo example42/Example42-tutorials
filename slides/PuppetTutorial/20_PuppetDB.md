@@ -1,3 +1,14 @@
+# PuppetDB - Overview
+
+### What PuppetDB does
+
+### Installation and configuration
+
+### API and query language
+
+### The puppetdbquery module
+
+
 # Introduction to PuppetDB
 PuppetDB is a "fast, scalable and reliable" data warehouse for Puppet.
 
@@ -20,10 +31,10 @@ The latter is definitively recommended on production environment where there are
 
 The configuration files are:
 
-```/etc/sysconfig/puppetdb``` (```/etc/default/puppetdb``` on Debian) is the init script configuration file, here you can set JAVA settings like JAVA_ARGS or JAVA_BIN
+```/etc/sysconfig/puppetdb``` (```/etc/default/puppetdb``` on Debian) is the init script configuration file, here we can set JAVA settings like JAVA_ARGS or JAVA_BIN
 
 
-```/etc/puppetdb/conf.d/``` is the configuration directory, here you may have different .ini files where to configure **[global]** settings, **[database]** backends, **[command-processing]** options, **[jetty]** parameters for HTTP connections and **[repl]** settings for remote runtime configurations (used for development/debugging).
+```/etc/puppetdb/conf.d/``` is the configuration directory, here we may have different .ini files where to configure **[global]** settings, **[database]** backends, **[command-processing]** options, **[jetty]** parameters for HTTP connections and **[repl]** settings for remote runtime configurations (used for development/debugging).
 
 
 ```/etc/puppetdb/log4j.properties``` is the logging config file based on Log4j.
@@ -35,7 +46,7 @@ The configuration files are:
 # PuppetDB console and tools
 
 #### Integrated console: Anaylize PuppetDB performance
-PuppetDB provides a performances dashboard out of the box, you can use it to check how the software is working: **http://<puppetdb.server>:8080/dashboard/**.
+PuppetDB provides a performances dashboard out of the box, we can use it to check how the software is working: **http://<puppetdb.server>:8080/dashboard/**.
 This is integral part of the PuppetDB software.
 
 #### Puppet Board: Query PuppetDB from the web
@@ -43,7 +54,7 @@ A nice frontend that allows interrogation of the PuppetDB from the web is [Puppe
 This software is contributed from the community.
 
 #### Puppetdbquery module: Query PuppetDB from Puppet manifests
-An incredibly useful module that provides faces, functions and hiera backends that work with PuppetDB is the [puppetdbquery module](https://github.com/dalen/puppet-puppetdbquery). You can install it also from the Forge:
+An incredibly useful module that provides faces, functions and hiera backends that work with PuppetDB is the [puppetdbquery module](https://github.com/dalen/puppet-puppetdbquery). We can install it also from the Forge:
 
       puppet module install dalen-puppetdbquery
 
@@ -57,7 +68,7 @@ PuppetDB exposes an [HTTP API](http://docs.puppetlabs.com/puppetdb/latest/api/) 
 A standard REST API is used to query data.
 
 The current (API v3) available endpoints are: ```metrics```, ```fact-names```, ```facts```, ```nodes```, ```resources```, ```reports```, ```events```, ```event-counts```, ```aggregate-event-counts```, ```server-time```
-  
+
 
 #### COMMANDS for writing
 Explicit **commands** are used (via HTTP using the /commands/ URL) used to populate and modify data.
@@ -70,7 +81,7 @@ There are different versions of the APIs as they evolve with PuppetDB versions.
 
 As October 2013, Version 1 of the API is deprecated, Version 2 and 3 (the latter adds new endpoints and is recommended) are both supported.
 
-You can access a specific version of the API using the relevant prefix: 
+We can access a specific version of the API using the relevant prefix:
 
     http[s]://puppetdb.server/v#/<endpoint>/[NAME]/[VALUE][?query=<QUERY STRING>]
 
@@ -82,7 +93,7 @@ Queries to the REST endpoints can define search scope and limitations for the gi
 The [PuppetDbQueryModule](https://github.com/dalen/puppet-puppetdbquery) is developed by a community member, Erik Dalen, and is the most used and useful module available to work with PuppetDB: it provides command lines tools (as Puppet Faces), functions to query PuppetDB and a PuppetDB based Hiera backend.
 
 ## Query format
-All the queries you can do with this module are in the format
+All the queries we can do with this module are in the format
 
     Type[Name]{attribute1=foo and attribute2=bar}
 
@@ -113,4 +124,3 @@ The functions provided by the module can be used inside manifests to populate th
 **query_facts** requires 2 arguments: the query to use to discover nodes and the list of facts to return for them. It returns a nested hash in JSON format.
 
     query_facts('Class[Apache]{port=443}', ['osfamily', 'ipaddress'])
-

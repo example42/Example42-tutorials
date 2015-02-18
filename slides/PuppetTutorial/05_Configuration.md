@@ -1,8 +1,20 @@
+# Puppet Configuration and basic usage - Overview
+
+### Operational modes: apply / agent
+
+### Configuration files and options
+
+### Useful Paths
+
+### Anatomy of a Puppet run
+
+
+
 # Operational modes
 
 ## Masterless - puppet apply
 
-Your Puppet code (written in manifests) is applied directly on the target system.
+Our Puppet code (written in manifests) is applied directly on the target system.
 
 No need of a complete client-server infrastructure.
 
@@ -12,9 +24,9 @@ Command used: ```puppet apply``` (generally as root)
 
 ## Master / Client - puppet agent
 
-You have clients, your managed nodes, where Puppet client is installed.
+We have clients, our managed nodes, where Puppet client is installed.
 
-And you have one or more Masters where Puppet server runs as a service
+And we have one or more Masters where Puppet server runs as a service
 
 Client/Server communication is via https (**port 8140**)
 
@@ -39,7 +51,7 @@ Command used on the server: ```puppet master```  (generally as **puppet**)
 
   Need to define a fitting deployment workflow. Hints: [Rump](https://github.com/railsmachine/rump) - [supply_drop](https://github.com/pitluga/supply_drop)
 
-  With Puppet > 2.6 you can use file sources urls like:
+  With Puppet > 2.6 we can use file sources urls like:
 
     puppet:///modules/example42/apache/vhost.conf
 
@@ -63,7 +75,7 @@ Command used on the server: ```puppet master```  (generally as **puppet**)
 
 # Certificates management
 
-  On the Master you can use ```puppet cert``` to manage certificates
+  On the Master we can use ```puppet cert``` to manage certificates
 
   List the (client) certificates to sign:
 
@@ -103,7 +115,7 @@ Once signed on the Master, the client can connect and receive its catalog:
     client # puppet agent -t
 
 
-If you have issues with certificates (reinstalled client or other certs related problemes):
+If we have issues with certificates (reinstalled client or other certs related problemes):
 
 Be sure client and server times are synced
 
@@ -182,7 +194,7 @@ Full [configuration reference](http://docs.puppetlabs.com/references/latest/conf
 
 All configuration options can be overriden by command-line options.
 
-A very common option used when you want to see immediately the effect of a Puppet run (it's actually the combination of: --onetime, --verbose, --ignorecache, --no-daemonize, --no-usecacheonfailure, --detailed-exit-codes, --no-splay, and --show_diff):
+A very common option used when we want to see immediately the effect of a Puppet run (it's actually the combination of: --onetime, --verbose, --ignorecache, --no-daemonize, --no-usecacheonfailure, --detailed-exit-codes, --no-splay, and --show_diff):
 
     puppet agent --test # Can be abbreviate to -t
 
@@ -243,3 +255,55 @@ These are other configuration files for specific functions. [Details](http://doc
 #### **/etc/puppet/environments/production/environment.conf**
 
 Contains environment specific settings
+
+
+# Anatomy of a Puppet Run - Part 1: Catalog compilation
+
+Execute Puppet on the client
+
+Client shell # puppet agent -t
+
+If pluginsync = true (default from Puppet 3.0) the client retrieves all extra plugins (facts, types and providers) present in modules on the server's $modulepath
+
+Client output # Info: Retrieving plugin
+
+The client runs facter and send its facts to the server
+
+Client output # Info: Loading facts in /var/lib/puppet/lib/facter/... [...]
+
+The server looks for the client's hostname (or certname, if different from the hostname) and looks into its nodes list
+
+The server compiles the catalog for the client using also client's facts
+
+Server's logs # Compiled catalog for <client> in environment production in 8.22 seconds
+
+If there are not syntax errors in the processed Puppet code, the server sends the catalog to the client, in PSON format.
+
+# Anatomy of a Puppet Run - Part 2: Catalog application
+
+Client output # Info: Caching catalog for <client>
+
+The client receives the catalog and starts to apply it locally
+If there are dependency loops the catalog can't be applied and the whole tun fails.
+
+Client output # Info: Applying configuration version '1355353107'
+
+All changes to the system are shown here. If there are errors (in red or pink, according to Puppet versions) they are relevant to specific resources but do not block the application of the other resources (unless they depend on the failed ones).
+
+At the end ot the Puppet run the client sends to the server a report of what has been changed
+
+Client output # Finished catalog run in 13.78 seconds
+
+The server eventually sends the report to a Report Collector
+
+
+# Puppet Configuration and basic usage - Practice
+
+Use the command ```puppet config print``` to explore Puppet's configuration options.
+
+Give a look to the various Puppet related directories and their contents:
+```/etc/puppet```, ```/var/lib/puppet```, ```/var/log/puppet```
+
+If the lab setup allows it, run Puppet on a new client and sign its certificate on the master.
+
+Explore and describe the output of a Puppet run in apply and agent mode.

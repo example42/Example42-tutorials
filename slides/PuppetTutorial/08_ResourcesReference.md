@@ -1,3 +1,12 @@
+# Resources reference - Overview
+
+### Where to find docs about Puppet resources
+
+### Main resources: package, service, file, user, exec
+
+### Language Style
+
+
 # Online documentation on types
 
 #### Complete [Type Reference](http://docs.puppetlabs.com/references/latest/type.html)
@@ -13,7 +22,7 @@ Check the Puppet Core [Types Cheatsheet](http://docs.puppetlabs.com/puppet_core_
 
 #### Types reference documentation
 
-You can check all the types documentation via the command line:
+We can check all the types documentation via the command line:
 
     puppet describe <type>
 
@@ -27,11 +36,11 @@ To show all the available resource types:
 
 #### Inspect existing resource types
 
-To interactively inspect and modify your system's resources
+To interactively inspect and modify our system's resources
 
     puppet resource <type> [name]
 
-Remember you can use the same command to CHANGE your resources attibutes:
+Remember we can use the same command to CHANGE our resources attibutes:
 
     puppet resource <type> <name> [attribute=value] [attribute2=value2]
 
@@ -65,7 +74,7 @@ The main arguments:
 
 # Managing files
 
-Files are the most configured resources on a system, you manage them with the **file** type:
+Files are the most configured resources on a system, we manage them with the **file** type:
 
     file { 'httpd.conf':
         # (namevar) The file path
@@ -90,7 +99,7 @@ Files are the most configured resources on a system, you manage them with the **
 
 # Executing commands
 
-You can run plain commands using Puppet's **exec** type. Since Puppet applies it at every run, either the command can be safely run multiple times or you have to use one of the **creates**, **unless**, **onlyif**, **refreshonly** arguments to manage when to execute it.
+We can run plain commands using Puppet's **exec** type. Since Puppet applies it at every run, either the command can be safely run multiple times or we have to use one of the **creates**, **unless**, **onlyif**, **refreshonly** arguments to manage when to execute it.
 
     exec { 'get_my_file':
         # (namevar) The command to execute

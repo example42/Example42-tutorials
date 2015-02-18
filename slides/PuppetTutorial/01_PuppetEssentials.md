@@ -1,3 +1,12 @@
+# Puppet Essentials - Overview
+
+### Introduction to Puppet
+
+### Configuration management tools
+
+### Puppet Ecosystem and related software
+
+
 # What is Puppet
 
   A **Configuration Management** Tool
@@ -70,14 +79,12 @@
   Available by default
 
     apt-get install puppet       # On clients (nodes)
-
     apt-get install puppetmaster # On server (master)
 
   RedHat, Centos, Fedora
   Add EPEL repository or RHN Extra channel
 
     yum install puppet        # On clients (nodes)
-
     yum install puppet-server # On server (master)
 
   Use [PuppetLabs repositories](http://docs.puppetlabs.com/guides/puppetlabs_package_repositories.html) for latest updates

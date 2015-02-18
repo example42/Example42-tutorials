@@ -1,3 +1,12 @@
+# MCollective - Overview
+
+### Essentials
+
+### Installation and configuration
+
+### The mco command
+
+
 # MCollective essentials
 
 An orchestration framework that allows massively parallel actions on the infrastructure's server
@@ -17,7 +26,7 @@ Common plugins are: **service**, **package**, **puppetd**, **filemgr**...
 Simple RCPs allow easy definitions of new plugins or actions.
 
 Security is handled at different layers: transport, authentication and authorization via different plugins. Here is a [Security Overview](http://docs.puppetlabs.com/mcollective/security.html)
-  
+
 # Installation
 
 Some distros provide native mcollective packages but it's definitively recommended to use [PuppetLabs repositories](http://docs.puppetlabs.com/guides/puppetlabs_package_repositories.html) to have recent mcollective versions and packages for the needed dependencies.
@@ -26,8 +35,8 @@ Some distros provide native mcollective packages but it's definitively recommend
 
   On the administrative nodes, from where to control the infrastructure, install the **mcollective-client** package, it's configuration file is **/etc/mcollective/client.cfg**
 
-  On both clients and servers you have to install the [agent plugins](http://docs.puppetlabs.com/mcollective/deploy/plugins.html)
-  
+  On both clients and servers we have to install the [agent plugins](http://docs.puppetlabs.com/mcollective/deploy/plugins.html)
+
   On the middleware server(s) install **activemq** or **rabbitmq**
 
 # Configuration
@@ -36,7 +45,7 @@ Configuration files are similar for [server](http://docs.puppetlabs.com/mcollect
 
 They are in a typical setting = value format and # are used for comments.
 
-You have to define to connetion settings to the middleware, the settings for the chosen security plugins, the facts source and other general settings.
+We have to define to connetion settings to the middleware, the settings for the chosen security plugins, the facts source and other general settings.
 
 The setup of the whole infrastructure involves some parameters to be consistent on the mcollective config files and the message broker ones (credentials and eventually certificates).
 

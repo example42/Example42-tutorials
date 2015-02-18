@@ -1,3 +1,8 @@
+# Scaling Puppet
+
+### Optimizing code for performance
+
+
 # Optimize code for performance
 
   Reduce the number of resources per node
@@ -30,7 +35,7 @@
 
   Use a [setup with Passenger](http://docs.puppetlabs.com/guides/passenger.html) to have multiple PuppetMasters childs on different CPUs
 
-  Disable Store Configs if you don't use them
+  Disable Store Configs if not used
 
     storeconfigs = false
 

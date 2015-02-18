@@ -1,14 +1,29 @@
+# Language reference - Overview
+
+### Referencing a resource
+
+### Managing resources ordering
+
+### Metaparameters
+
+### Conditionals and
+
+### Comparison operators
+
+### Nodes and classes inheritance
+
+
 # Resource references
 In Puppet any resource is uniquely identified by its type and its name.
-You can't have 2 resources of the same type with the same name in a catalog.
+We can't have 2 resources of the same type with the same name in a catalog.
 
-We have seen that you declare resources with a syntax like:
+We have seen that we declare resources with a syntax like:
 
     type { 'name':
       arguments => values,
     }
 
-When you need to reference to them in your code the syntax is like:
+When we need to reference to them in our code the syntax is like:
 
     Type['name']
 
@@ -53,7 +68,7 @@ Place **global** resource defaults in /etc/pupept/manifests/site.pp outside any 
 Place **local** resource defaults at the beginning of a class that uses them (mostly for clarity sake, as they are parse-order independent).
 
 # Nodes inheritance
-On the PuppetMaster you can define with the **node** definition the resources to apply to any node.
+On the PuppetMaster we can define with the **node** definition the resources to apply to any node.
 
 It is possible to have an inheritance structure for nodes, so that resources defined for a node are automatically included in an inheriting node.
 
@@ -68,7 +83,6 @@ When using this approach it was important to avoid the inclusion on classes in t
 
 This is no more possible because variables are not more dynamically scoped, and generally speaking nodes inheritance has been deprecated.
 
-Just know that is exists and that if you still want to use it, be sure that you use it to include classes whose parameters are defined either on Hiera or at top scope.
 
 
 # Class inheritance
@@ -95,7 +109,7 @@ Moreover the child class can override the arguments of a resource defined in the
 
 In Puppet 2.6 it has been introduced the concept of Run Stages to help users in managing the order of dependencies when applying resources.
 
-Puppet (> 2.6) provides a default **main** stage, you can add any number or further stages with the stage resource type:
+Puppet (> 2.6) provides a default **main** stage, we can add any number or further stages with the stage resource type:
 
     stage { 'pre':
       before => Stage['main'],
@@ -106,7 +120,7 @@ Which is equivalent to:
     stage { 'pre': }
     Stage['pre'] -> Stage['main']
 
-You can assign any class to a defined stage with the stage metaparameter:
+We can assign any class to a defined stage with the stage metaparameter:
 
     class { 'yum':
       stage => 'pre',
@@ -141,7 +155,7 @@ To manage resources ordering, there are 3 different methods, which can cohexist:
 
 # Managing dependencies - before | notify
 
-In a typical Package/Service/Configuration file example you want the package to be installed first, configure it and then start the service, eventually managing its restart if the config file changes.
+In a typical Package/Service/Configuration file example we want the package to be installed first, configure it and then start the service, eventually managing its restart if the config file changes.
 
 This can be expressed with metaparameters:
 
@@ -191,7 +205,7 @@ Selectors therefore just returns values and are not used to manage conditionally
 Case statements are NOT used inside resource declarations.
 
 **if elsif else** conditionals, like case, are used to execute different blocks of code and can't be used inside resources declarations.
-You can can use any of Puppet's comparison expressions and you can combine more than one for complex patterns matching.
+We can can use any of Puppet's comparison expressions and we can combine more than one for complex patterns matching.
 
 **unless** is somehow the opposite of **if**. It evaluates a boolean condition and if it's *false* it executes a block of code. It doesn't have elsif / else clauses.
 
@@ -255,7 +269,7 @@ It's possible to combine multiple comparisons with **and** and **or**
 
 # Exported resources
 
-When you need to provide to an host informations about resources present in another host, you need **exported resources**: resources declared in the catalog of a node (based on its facts and variables) but applied (collected) on another node.
+When we need to provide to an host informations about resources present in another host, we need **exported resources**: resources declared in the catalog of a node (based on its facts and variables) but applied (collected) on another node.
 
 Resources are declared with the special @@ notation which marks them as exported so that they are not applied to the node where they are declared:
 
@@ -278,8 +292,8 @@ Once a catalog containing exported resources has been applied on a node and stor
 
 # Exported resources - Configuration
 
-In order to use exported resources you need to enable on the Puppet Master the **storeconfigs** option and specify the backend to use.
-You can do this configure a PuppetMaster to use PuppetDB:
+In order to use exported resources we need to enable on the Puppet Master the **storeconfigs** option and specify the backend to use.
+We can do this configuring a PuppetMaster to use PuppetDB:
 
     storeconfigs = true
     storeconfigs_backend = puppetdb

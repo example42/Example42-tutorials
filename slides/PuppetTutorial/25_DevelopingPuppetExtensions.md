@@ -1,3 +1,13 @@
+# Developing Puppet extensions - Overview
+
+### Developing custom facts
+
+### Developing custom types and provides
+
+### Developing functions
+
+
+
 # Developing Facts
 
   Facts are generated on the client before the evaluation of the Puppet code on the server.
@@ -122,4 +132,3 @@
     end
 
   This file is placed in puppi/lib/puppet/parser/functions/get_magicvar.rb.
-

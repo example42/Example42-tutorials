@@ -1,3 +1,16 @@
+# Modules - Overview
+
+### Modules structure and conventions
+
+### Erb templates
+
+### Patterns for modules reusability
+
+### Principles of modules testing
+
+### Modules documentation
+
+
 # Modules
 
   Self Contained and Distributable *recipes* contained in a directory with a predefined structure
@@ -65,7 +78,7 @@
     content => template('mysql/my.cnf.erb'),
     # Template is in: $modulepath/mysql/templates/my.cnf.erb
 
-  Provide static files (Static content). Note you can use content OR source for the same file.
+  Provide static files (Static content). Note we can't use content AND source for the same file.
 
     source => 'puppet:///modules/mysql/my.cnf'
     # File is in: $modulepath/mysql/files/my.cnf

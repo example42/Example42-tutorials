@@ -167,3 +167,9 @@ Corrected style:
       group   => 'root',
       path    => $issue_file_path,
     }
+
+# Resources reference - Practice
+
+Create a manifest that contains all the explored resources: package, service, file, exec, user.
+
+Use Pupppet Lint to verify its style.

@@ -72,7 +72,7 @@ Example for a **file** resource type:
 
 # Resource Types reference
 
-Find online the complete [Type Reference](http://docs.puppetlabs.com/references/latest/type.html) for the latest o ealier versions.
+Find online the complete [Type Reference](http://docs.puppetlabs.com/references/latest/type.html) for the latest or earlier versions.
 
 From the shell the command line interface:
 
@@ -127,7 +127,6 @@ Creation of nginx.conf with content retrieved from different sources (first foun
       path    => '/etc/nginx/nginx.conf',
       source  => [
           "puppet:///modules/site/nginx.conf--${::fqdn}",
-          "puppet:///modules/site/nginx.conf-${::role}",
           "puppet:///modules/site/nginx.conf" ],
     }
 
@@ -138,7 +137,7 @@ Resources are abstracted from the underlying OS
 
 Resource **types** have different providers for different OS
 
-Package type is known for the great number of **providers**
+The ```package``` type is known for the great number of **providers**
 
     ls $(facter rubysitedir)/puppet/provider/package
 
@@ -166,7 +165,7 @@ Example of a class **definition**:
     class mysql (
       root_password => 'default_value',
       port          => '3306',
-    }
+    ) {
       package { 'mysql-server':
         ensure => present,
       }
@@ -176,7 +175,7 @@ Example of a class **definition**:
       [...]
     }
 
-Note that when we define a class we just describe what id does and what parameters is has, we don't actually add it and its resources to the catalog.
+Note that when we define a class we just describe what it does and what parameters it has, we don't actually add it and its resources to the catalog.
 
 # Classes - Declaration
 When we have to use a class previously defined, we **declare** it.
@@ -187,7 +186,7 @@ This can be done in 2 different ways:
 
     include mysql
 
-(Inside a catalog we can have multiple includes of the same class, it's applied only once.)
+(Inside a catalog we can have multiple includes of the same class but that class it's applied only once.)
 
 "New style" (from Puppet 2.6) class declaration with explicit parameters:
 
@@ -204,7 +203,7 @@ Also called: **Defined resource types** or **defined types**
 
 Similar to parametrized classes but can be used multiple times (with different titles).
 
-**Definition** example:
+**Definition** of a define:
 
     define apache::virtualhost (
       $ensure   = present,
@@ -217,7 +216,7 @@ Similar to parametrized classes but can be used multiple times (with different t
       }
     }
 
-Usage example (**declaration**):
+**Declaration** of a define:
 
     apache::virtualhost { 'www.example42.com':
       template => 'site/apache/www.example42.com-erb'
@@ -284,44 +283,52 @@ Commonly used ENC are Puppet DashBoard, the Foreman, Puppet Enterprise.
 
 # Built-in variables
 
-Puppet provide some useful built in variables, they can be:
+Puppet provides some useful built in variables, they can be:
 
 #### Set by the client (agent)
 
-```$clientcert``` the name of the node's certificate. By default its ```$::fqdn```
-```$clientversion``` the Puppet version on the client
+```$clientcert``` - the name of the node's certificate. By default its ```$::fqdn```
+```$clientversion``` - the Puppet version on the client
 
 #### Set by the server (master)
 
-```$environment``` (default: production) the Puppet environment where are placed modules and manifests.
-```$servername```, ```$serverip```, the Puppet Master FQDN and IP
-```$serverversion``` the Puppet version on the server
-```$settings::<name>``` any configuration setting on the Master's ```puppet.conf```
+```$environment``` (default: production) - the Puppet environment where are placed modules and manifests.
+```$servername```, ```$serverip``` - the Puppet Master FQDN and IP
+```$serverversion``` - the Puppet version on the server
+```$settings::<name>``` - any configuration setting on the Master's ```puppet.conf```
 
 #### Set by the server during catalog compilation
 
-```$module_name``` is the name of the module that contains the current resource's definition
-```$caller_module_name``` is the name of the module that contains the current resource's declaration
+```$module_name``` - the name of the module that contains the current resource's definition
+```$caller_module_name``` - the name of the module that contains the current resource's declaration
 
 
 # Environments
-Puppet environments allow isolation of Puppet code and data: for each environment we can have different manifest files, Hiera data and modules.
+Puppet environments allow isolation of Puppet code and data: for each environment we can have different paths manifest files, Hiera data and modules.
 
 Puppet's environments DO NOT necessarily have to match the operational environments of our servers.
 
-### [Config file Environments](https://docs.puppetlabs.com/puppet/latest/reference/environments_classic.html)
+Environments mamanagement has changed from Puppet 3.6 onwards:
 
-Until Puppet 3.x Puppet environment configuration was defined inside ```puppet.conf``` with a syntax like:
+Earlier versions were based on so-called **Config file Environments** where each environment had to be defined in **puppet.conf**.
 
-     [my_environment]
+From 3.6 **directory environments** have been introduced and the older approach has been deprecated.
+
+On Puppet 4.x only directory environments are supported.
+
+# [Config file Environments](https://docs.puppetlabs.com/puppet/latest/reference/environments_classic.html)
+
+The "old" config file environments are defined inside ```puppet.conf``` with a syntax like:
+
+     [test]
        modulepath = $confdir/environments/test/modules:$condfir/modules
        manifest = $confdir/environments/test/manifests
 
 For the default **production** environment there were the config parameters, now deprecated, ```manifest``` and ```modulepath``` in the ```[main]``` section.
 
-### [Directory Environments](https://docs.puppetlabs.com/puppet/latest/reference/environments_configuring.html)
+# [Directory Environments](https://docs.puppetlabs.com/puppet/latest/reference/environments_configuring.html)
 
-In Puppet 3.6 Directory Environments were introduced. They are the default and mandatory choice in Puppet 4. In ```puppet.conf``` they are configured as follows:
+Directory Environments are configured in ```puppet.conf``` as follows:
 
     [main]
     environmentpath = $configdir/
@@ -360,7 +367,7 @@ A node can inherit another node and include all the classes and variables define
 
 # Nodes classification via an ENC
 
-Puppet can query an external source to retrieve the classes and the variables to assign to a node. This source is called External Node Classifier (ENC) and can be anything that when interrogated via a script with the clients' certname as first parameter returns a yaml file with the list of classes and parameters.
+Puppet can query an external source to retrieve the classes and the parameters to assign to a node. This source is called External Node Classifier (ENC) and can be anything that, when interrogated via a script with the clients' certname as first parameter, returns a yaml file with the list of classes and parameters.
 
 Common ENC are **Puppet DashBoard**, **The Foreman** and **Puppet Enterprise** (where the functionality of ENC is enabled by default).
 
@@ -369,7 +376,7 @@ To enable the usage of an ENC set these parameters in ```puppet.conf```
     # Enable the usage of a script to classify nodes
     node_terminus = exec
 
-    # Path of the script
+    # Path of the script to execute to classify nodes 
     external_nodes = /etc/puppet/node.rb
 
 # Nodes classification with Hiera

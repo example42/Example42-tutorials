@@ -107,7 +107,7 @@ Moreover the child class can override the arguments of a resource defined in the
 
 # Run Stages
 
-In Puppet 2.6 it has been introduced the concept of Run Stages to help users in managing the order of dependencies when applying resources.
+Puppet 2.6 introduced the concept of Run Stages to help users manage the order of dependencies when applying resources.
 
 Puppet (> 2.6) provides a default **main** stage, we can add any number or further stages with the stage resource type:
 
@@ -269,7 +269,7 @@ It's possible to combine multiple comparisons with **and** and **or**
 
 # Exported resources
 
-When we need to provide to an host informations about resources present in another host, we need **exported resources**: resources declared in the catalog of a node (based on its facts and variables) but applied (collected) on another node.
+When we need to provide information about resources present in another host, we need **exported resources**: resources declared in the catalog of a node (based on its facts and variables) but applied (collected) on another node.
 
 Resources are declared with the special @@ notation which marks them as exported so that they are not applied to the node where they are declared:
 
@@ -283,7 +283,7 @@ Resources are declared with the special @@ notation which marks them as exported
       tag     => "balance-fe",
     }
 
-Once a catalog containing exported resources has been applied on a node and stored by the PuppetMaster (typically on PuppetDB), the exported resources can be collected with the spaceshift syntax (where is possible to specify search queries):
+Once a catalog containing exported resources has been applied on a node and stored by the PuppetMaster (typically on PuppetDB), the exported resources can be collected with the spaceship syntax (where is possible to specify search queries):
 
     Host << || >>
     Concat::Fragment <<| tag == "balance-fe" |>>

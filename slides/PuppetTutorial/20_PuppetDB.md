@@ -46,7 +46,8 @@ The configuration files are:
 # PuppetDB console and tools
 
 #### Integrated console: Anaylize PuppetDB performance
-PuppetDB provides a performances dashboard out of the box, we can use it to check how the software is working: **http://<puppetdb.server>:8080/dashboard/**.
+PuppetDB provides a performances dashboard out of the box, we can use it to check how the software is working: **http://puppetdb.server:8080/dashboard/**.
+
 This is integral part of the PuppetDB software.
 
 #### Puppet Board: Query PuppetDB from the web

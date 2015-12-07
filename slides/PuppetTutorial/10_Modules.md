@@ -103,7 +103,7 @@
   (Sourced files, instead, are retrieved from the puppetmaster during catalog application)
 
 
-# Principes behind a Reusable Module
+# Principles behind a Reusable Module
 
   Data Separation
 

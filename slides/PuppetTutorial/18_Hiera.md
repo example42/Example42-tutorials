@@ -72,7 +72,7 @@ With the ```:backends``` global configuration we define which backends to use, t
 ### Extra backends:
 Many additional backends are available, the most interesting ones are:
 
-[**gpg**](https://github.com/crayfishx/hiera-gpg) - Data is stored in GPG encripted yaml files
+[**gpg**](https://github.com/crayfishx/hiera-gpg) - Data is stored in GPG encrypted yaml files
 
 [**http**](https://github.com/crayfishx/hiera-http) - Data is retrieved from a REST service
 
@@ -144,7 +144,7 @@ For example in a class definition like:
         template = undef,
       ) { . . . }
 
-Puppet 3 automatically looks for the Hiera key openssh::template if no value is explitely set when declaring the class.
+Puppet 3 automatically looks for the Hiera key openssh::template if no value is explicitly set when declaring the class.
 
 To emulate a similar behaviour on pre Puppet 3 we should write something like:
 
@@ -152,7 +152,7 @@ To emulate a similar behaviour on pre Puppet 3 we should write something like:
         template = hiera("openssh::template"),
       ) { . . . }
 
-If a default value is set for an argument that value is used only when user has not explicitly declared value for that argument and Hiera automatic lookup for that argument doesn't return any value.
+If a default value is set for an argument, that value is used only when user has not explicitly declared value for that argument and Hiera automatic lookup for that argument doesn't return any value.
 
 
 # Using hiera from the command line
@@ -162,6 +162,7 @@ Hiera can be invoken via the command line to interrogate the given key's value:
         hiera dns_servers
 
 This will return the default value as no node's specific information is provided. More useful is to provide the whole facts' yaml of a node, so that the returned value can be based on the dynamic values of the hierarchy.
+
 On the Pupppet Masters the facts of all the managed clients are collected in $vardir/yaml/facts so this is the best place to see how Hiera evaluates keys for different clients:
 
         hiera dns_servers --yaml /var/lib/puppet/yaml/facts/<node>.yaml

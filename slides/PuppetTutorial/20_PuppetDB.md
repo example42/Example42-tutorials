@@ -24,7 +24,7 @@ The best source from where to retrieve it are the official [Puppetlabs repositor
 
 
 # PuppetDB installation
-For a complete overview of the installation process check the official documentation and choose between installatio from [puppetdb module](http://docs.puppetlabs.com/puppetdb/latest/install_via_module.html) or from [packages](http://docs.puppetlabs.com/puppetdb/latest/install_from_packages.html).
+For a complete overview of the installation process check the official documentation and choose between installation from [puppetdb module](http://docs.puppetlabs.com/puppetdb/latest/install_via_module.html) or from [packages](http://docs.puppetlabs.com/puppetdb/latest/install_from_packages.html).
 
 PuppetDB can persist data either on an embedded HSQLDB database or on PostgreSQL.
 The latter is definitively recommended on production environment where there are a few dozens of servers or more.
@@ -46,7 +46,8 @@ The configuration files are:
 # PuppetDB console and tools
 
 #### Integrated console: Anaylize PuppetDB performance
-PuppetDB provides a performances dashboard out of the box, we can use it to check how the software is working: **http://<puppetdb.server>:8080/dashboard/**.
+PuppetDB provides a performances dashboard out of the box, we can use it to check how the software is working: **http://puppetdb.server:8080/dashboard/**.
+
 This is integral part of the PuppetDB software.
 
 #### Puppet Board: Query PuppetDB from the web

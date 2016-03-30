@@ -21,7 +21,7 @@ task clean(description: "Cleans project build result.") << {
 tasks.withType(Slidery) {
   title "Puppet Tutorial"  
   author "Alessandro Franceschi"
-  company "Lab42"
+  company "Example42"
 //  logo "images/lab42.png"
   inputFile "slides/abbreviations.md"
   inputFiles fileTree("slides/$slides") { 

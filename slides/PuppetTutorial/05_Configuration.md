@@ -221,7 +221,7 @@ Wait for certificate approval (by default 120 seconds) in the first Puppet run (
 
 **/var/lib/puppet** contains Puppet operational data (catalog, certs, backup of files...)
 
-**/var/lib/puppet/ssl** contains SSL certificate
+**/var/lib/puppet/ssl** contains SSL certificate
 
 **/var/lib/puppet/clientbucket** contains backup copies of the files changed by Puppet
 

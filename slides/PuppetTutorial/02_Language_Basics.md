@@ -6,9 +6,9 @@
 
 ### Classes and defines
 
-### Variables and parameters
+### Variables and parameters
 
-### Nodes classification
+### Nodes classification
 
 
 # Puppet Language
@@ -318,7 +318,7 @@ On Puppet 4.x only directory environments are supported.
 
 # [Config file Environments](https://docs.puppetlabs.com/puppet/latest/reference/environments_classic.html)
 
-The "old" config file environments are defined inside ```puppet.conf``` with a syntax like:
+The "old" config file environments are defined inside ```puppet.conf``` with a syntax like:
 
      [test]
        modulepath = $confdir/environments/test/modules:$condfir/modules

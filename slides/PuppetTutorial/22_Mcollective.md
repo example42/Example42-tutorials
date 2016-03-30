@@ -2,7 +2,7 @@
 
 ### Essentials
 
-### Installation and configuration
+### Installation and configuration
 
 ### The mco command
 
